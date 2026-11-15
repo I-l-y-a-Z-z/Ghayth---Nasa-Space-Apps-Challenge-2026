@@ -1,3 +1,4 @@
+import {activateDemo, demoActive, demoApi} from './demo';
 export type Locale = 'ary' | 'fr' | 'en';
 export type Point = [number, number];
 export type Polygon = {type:'Polygon';coordinates:Point[][]};
@@ -46,8 +47,12 @@ export type Workspace = {plots:Plot[];plans:PlanSummary[];scenarios:Array<{plot_
 export type ChatReply = {message:string;locale:Locale;evaluation_ids:string[];facts:Array<Record<string,unknown>>;evidence_ids:string[];read_only:boolean;synthetic:boolean;what_if?:Evaluation|null;requires_confirmation?:boolean;suggested_actions?:Array<Record<string,unknown>>};
 export class ApiError extends Error {constructor(public code:string,message:string,public status:number){super(message);}}
 export async function api<T>(path:string,body?:unknown,method?:string):Promise<T>{
- const response = await fetch(path,{method:method || (body===undefined?'GET':'POST'),headers:{'Content-Type':'application/json','X-Project-ID':'demo'},...(body===undefined?{}:{body:JSON.stringify(body)})});
+ if(demoActive()) return demoApi<T>(path,body,method);
+ let response:Response;
+ try{response=await fetch(path,{method:method || (body===undefined?'GET':'POST'),headers:{'Content-Type':'application/json','X-Project-ID':'demo'},...(body===undefined?{}:{body:JSON.stringify(body)})});}
+ catch(error){if(location.hostname.endsWith('.pages.dev')){activateDemo();return demoApi<T>(path,body,method);}throw error;}
  const value = await response.json().catch(()=>({}));
+ if(value.error?.code==='DEMO_FALLBACK'){activateDemo();return demoApi<T>(path,body,method);}
  if(!response.ok) throw new ApiError(value.error?.code || 'REQUEST_FAILED',value.error?.message || String(response.status),response.status);
  return value as T;
 }

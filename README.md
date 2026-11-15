@@ -2,6 +2,8 @@
 
 Farm planning for Morocco in Darija, French and English. Draw a field, answer farming questions, compare crop rotations, then save or print a plan. The AgriX engine prioritizes environmental suitability and planting dates; historical Moroccan references supply supporting cost and sales estimates.
 
+**[Open the public demo](https://ghayth-demo.pages.dev/app/)** — currently running prepared synthetic examples with browser-local saves. See [deployment details and limitations](docs/live-demo.md).
+
 ## Run locally
 
 Use Python 3.10–3.12, Node 24 and npm 10+. Run commands from this repository root.
