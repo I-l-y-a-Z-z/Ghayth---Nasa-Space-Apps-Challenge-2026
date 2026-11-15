@@ -1,6 +1,8 @@
-# Free hosted demo on Render
+# Free-compute demo on Render
 
-The recommended zero-payment demo uses one **Render Free** web service and the existing **Neon Free** PostgreSQL/PostGIS database. The same service serves React, FastAPI, saved plans and typed chat over HTTPS. Server speech recognition and synthesis are disabled. Cloudflare Containers and Workers Paid are not required.
+**Account verification currently blocks deployment.** The connected Render account rejected creation of the Free service with HTTP 402, requiring payment information. No service was created. This option does not satisfy the current no-card requirement. With a card attached, even Free instances can incur bandwidth/build overage charges; see [Render's billing FAQ](https://render.com/docs/faq). No payment method or paid plan has been enabled by this setup.
+
+This prepared configuration uses one **Render Free** web service and the existing **Neon Free** PostgreSQL/PostGIS database. The same service serves React, FastAPI, saved plans and typed chat over HTTPS. Server speech recognition and synthesis are disabled. Cloudflare Containers and Workers Paid are not required.
 
 [render.yaml](../render.yaml) defines only one service with `plan: free`. It creates no Render database, paid worker, persistent disk or scaling policy. Deployments are manual. Keep the Render workspace on its free plan and do not enable paid compute. Without a payment method, Render suspends free services or builds when their included allowances run out instead of billing overages. See [Render's free service limits](https://render.com/docs/free).
 
@@ -37,4 +39,4 @@ The initial free setup leaves R2 unconfigured and does not depend on a Cloudflar
 
 The local demo planning smoke test peaked at approximately 162 MiB of process memory. That is a local measurement, not a bound on live geospatial processing. Render Free provides 512 MB RAM, sleeps after 15 minutes without incoming traffic, and typically takes about a minute to wake. Larger analyses can exceed the memory or outbound-traffic allowances. This is suitable for a small demo with cold starts, not guaranteed continuous availability over the intended months. See [Render's instance guidance](https://render.com/articles/from-side-project-to-production-scaling-your-first-app).
 
-The repository configuration follows [Render's Blueprint specification](https://render.com/docs/blueprint-spec). Account connection and a successful hosted build are still needed before an application URL is available.
+The repository configuration follows [Render's Blueprint specification](https://render.com/docs/blueprint-spec). The account is connected; billing verification and a successful hosted deployment are still needed before an application URL is available. The local image-build attempt was blocked by this environment's user-namespace permissions, so only the application checks and Blueprint schema validation have completed.
