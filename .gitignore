@@ -1,0 +1,104 @@
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+.netrc
+_netrc
+*.key
+*.pem
+/secrets/
+/.aws/
+/.agents/
+/.codex/
+
+# Python environments and generated package metadata
+.venv/
+venv/
+env/
+ENV/
+__pypackages__/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.tox/
+.nox/
+
+# JavaScript dependencies and build output
+node_modules/
+dist/
+build/
+.vite/
+.vite-temp/
+*.tsbuildinfo
+/apps/api/src/agrix/static/appbuild/
+
+# Test, lint and coverage output
+.cache/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.hypothesis/
+.coverage
+.coverage.*
+coverage/
+coverage.xml
+htmlcov/
+junit.xml
+playwright-report/
+test-results/
+
+# Local application databases, including journal/WAL/SHM files
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+*.db
+*.db-*
+
+# Downloaded scientific assets, models and private speech corpora
+# Keep data/source_registry.yaml, raw samples, fixtures and AOI examples tracked.
+/data/cache/
+/data/models/
+/data/incoming/
+/data/prepared/
+/data/voice/
+/data/economics.json
+/data/economics.tmp
+/runs/
+/checkpoints/
+*.safetensors
+*.gguf
+*.ggml
+*.ckpt
+*.pt
+*.pth
+*.onnx
+*.wav
+*.mp3
+*.flac
+*.ogg
+*.m4a
+
+# Runtime logs, temporary files and delivery archives
+logs/
+*.log
+*.pid
+*.pid.lock
+*.tmp
+*.temp
+*.zip
+*.tar.gz
+*.tgz
+
+# Local editor and operating-system files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Dependency lockfiles and .env.example are intentionally versioned.

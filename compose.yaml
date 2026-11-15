@@ -1,0 +1,32 @@
+services:
+  ghayth:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg://ghayth:local-development@db:5432/ghayth
+      AGRIX_DEFAULT_ANALYSIS_MODE: live
+      AGRIX_REMOTE_ASSETS: "1"
+      AGRIX_HLS_MAX_SCENES: "10"
+    volumes:
+      - nasa-cache:/product/data/cache
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["sh", "-c", "cd apps/api && alembic upgrade head && cd ../.. && python -m uvicorn app:app --host 0.0.0.0 --port 8000"]
+  db:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_USER: ghayth
+      POSTGRES_PASSWORD: local-development
+      POSTGRES_DB: ghayth
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ghayth -d ghayth"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+volumes:
+  nasa-cache:
+  postgres-data:

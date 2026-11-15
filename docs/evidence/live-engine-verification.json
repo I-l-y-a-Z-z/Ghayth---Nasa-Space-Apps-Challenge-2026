@@ -1,0 +1,225 @@
+{
+  "analysis_status": "partial",
+  "production_system": "rainfed",
+  "production_system_origin": "explicit what-if input for verification; saved plot remains unknown",
+  "seconds": 2.98,
+  "candidate_count": 6,
+  "candidates": [
+    {
+      "status": "needs_confirmation",
+      "synthetic": false,
+      "environmental_score": 52.364,
+      "crops": [
+        {
+          "crop_id": "fallow",
+          "start_date": "2026-11-15",
+          "end_date": "2026-11-28",
+          "duration_days": 14
+        },
+        {
+          "crop_id": "chickpea",
+          "start_date": "2026-11-29",
+          "end_date": "2027-04-17",
+          "duration_days": 140
+        },
+        {
+          "crop_id": "fallow",
+          "start_date": "2027-04-18",
+          "end_date": "2027-11-28",
+          "duration_days": 225
+        },
+        {
+          "crop_id": "chickpea",
+          "start_date": "2027-11-29",
+          "end_date": "2028-04-14",
+          "duration_days": 138
+        },
+        {
+          "crop_id": "fallow",
+          "start_date": "2028-04-15",
+          "end_date": "2028-11-13",
+          "duration_days": 213
+        }
+      ]
+    },
+    {
+      "status": "needs_confirmation",
+      "synthetic": false,
+      "environmental_score": 52.064,
+      "crops": [
+        {
+          "crop_id": "fallow",
+          "start_date": "2026-11-15",
+          "end_date": "2026-11-28",
+          "duration_days": 14
+        },
+        {
+          "crop_id": "chickpea",
+          "start_date": "2026-11-29",
+          "end_date": "2027-04-17",
+          "duration_days": 140
+        },
+        {
+          "crop_id": "fallow",
+          "start_date": "2027-04-18",
+          "end_date": "2027-11-28",
+          "duration_days": 225
+        },
+        {
+          "crop_id": "lentil",
+          "start_date": "2027-11-29",
+          "end_date": "2028-04-09",
+          "duration_days": 133
+        },
+        {
+          "crop_id": "fallow",
+          "start_date": "2028-04-10",
+          "end_date": "2028-11-13",
+          "duration_days": 218
+        }
+      ]
+    },
+    {
+      "status": "needs_confirmation",
+      "synthetic": false,
+      "environmental_score": 51.908,
+      "crops": [
+        {
+          "crop_id": "fallow",
+          "start_date": "2026-11-15",
+          "end_date": "2026-11-28",
+          "duration_days": 14
+        },
+        {
+          "crop_id": "lentil",
+          "start_date": "2026-11-29",
+          "end_date": "2027-04-11",
+          "duration_days": 134
+        },
+        {
+          "crop_id": "fallow",
+          "start_date": "2027-04-12",
+          "end_date": "2027-11-28",
+          "duration_days": 231
+        },
+        {
+          "crop_id": "chickpea",
+          "start_date": "2027-11-29",
+          "end_date": "2028-04-14",
+          "duration_days": 138
+        },
+        {
+          "crop_id": "fallow",
+          "start_date": "2028-04-15",
+          "end_date": "2028-11-13",
+          "duration_days": 213
+        }
+      ]
+    },
+    {
+      "status": "needs_confirmation",
+      "synthetic": false,
+      "environmental_score": 51.878,
+      "crops": [
+        {
+          "crop_id": "fallow",
+          "start_date": "2026-11-15",
+          "end_date": "2026-11-28",
+          "duration_days": 14
+        },
+        {
+          "crop_id": "chickpea",
+          "start_date": "2026-11-29",
+          "end_date": "2027-04-17",
+          "duration_days": 140
+        },
+        {
+          "crop_id": "fallow",
+          "start_date": "2027-04-18",
+          "end_date": "2027-11-14",
+          "duration_days": 211
+        },
+        {
+          "crop_id": "chickpea",
+          "start_date": "2027-11-15",
+          "end_date": "2028-04-01",
+          "duration_days": 139
+        },
+        {
+          "crop_id": "fallow",
+          "start_date": "2028-04-02",
+          "end_date": "2028-11-13",
+          "duration_days": 226
+        }
+      ]
+    },
+    {
+      "status": "needs_confirmation",
+      "synthetic": false,
+      "environmental_score": 51.609,
+      "crops": [
+        {
+          "crop_id": "fallow",
+          "start_date": "2026-11-15",
+          "end_date": "2026-11-28",
+          "duration_days": 14
+        },
+        {
+          "crop_id": "lentil",
+          "start_date": "2026-11-29",
+          "end_date": "2027-04-11",
+          "duration_days": 134
+        },
+        {
+          "crop_id": "fallow",
+          "start_date": "2027-04-12",
+          "end_date": "2027-11-28",
+          "duration_days": 231
+        },
+        {
+          "crop_id": "lentil",
+          "start_date": "2027-11-29",
+          "end_date": "2028-04-09",
+          "duration_days": 133
+        },
+        {
+          "crop_id": "fallow",
+          "start_date": "2028-04-10",
+          "end_date": "2028-11-13",
+          "duration_days": 218
+        }
+      ]
+    },
+    {
+      "status": "needs_confirmation",
+      "synthetic": false,
+      "environmental_score": 51.596,
+      "crops": [
+        {
+          "crop_id": "chickpea",
+          "start_date": "2026-11-15",
+          "end_date": "2027-04-03",
+          "duration_days": 140
+        },
+        {
+          "crop_id": "fallow",
+          "start_date": "2027-04-04",
+          "end_date": "2027-11-28",
+          "duration_days": 239
+        },
+        {
+          "crop_id": "chickpea",
+          "start_date": "2027-11-29",
+          "end_date": "2028-04-14",
+          "duration_days": 138
+        },
+        {
+          "crop_id": "fallow",
+          "start_date": "2028-04-15",
+          "end_date": "2028-11-13",
+          "duration_days": 213
+        }
+      ]
+    }
+  ]
+}

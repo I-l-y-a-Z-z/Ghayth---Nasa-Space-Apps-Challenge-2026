@@ -1,0 +1,112 @@
+version: morocco-environment-screening-v2
+reviewed_on: '2026-11-15'
+references:
+  - id: fao56-water-v1
+    source_id: fao-irrigation-drainage-paper-56
+    source_version: '1998; chapters 3, 6, 8; tables 12, 22'
+    url: https://www.fao.org/4/x0490e/x0490e00.htm
+    origin: observed
+    topics: [water, temperature, soil]
+    quality_notes:
+      - FAO coefficients/rooting depths are generic reference conditions, not calibrated Moroccan parameters.
+      - Temperature-only Hargreaves ET0 is a screening fallback requiring regional verification.
+      - Dry faba, lentil, chickpea and cereal Kc values and depletion fractions follow tables 12 and 22.
+  - id: environmental-screening-policy-v2
+    source_id: agrix-explicit-environmental-screening-policy
+    source_version: '2.0'
+    origin: assumption
+    topics: [duration, ranking, terrain, drought, vegetation]
+    quality_notes:
+      - Thermal targets, stage fractions, scoring weights and slope runoff sensitivity are transparent uncalibrated planning assumptions.
+      - Species ecological temperature limits are not daily lethal thresholds or cultivar thermal bases.
+      - Scores are comparative indices, not probabilities or predicted yields.
+      - Soil storage is bracketed when initial moisture is unknown; surface moisture never initializes root-zone storage.
+      - Historical mean NDVI informs bare-ground exposure only; it does not identify previous crops.
+      - No observed moisture value is transplanted to a different historical date or future season.
+    uncertainty: Local cultivar phenology, vernalization, photoperiod, soil hydraulics and runoff require validation.
+crops:
+  wheat:
+    ecocrop_id: 2114
+    temperature_c: [5, 15, 23, 27]
+    ph: [5.5, 6, 7, 8.5]
+    cycle_days: [90, 250]
+    kc: [0.7, 1.15, 0.3]
+    root_depth_m: 1.5
+    depletion_fraction: 0.55
+    thermal_base_c: 0
+    thermal_upper_c: 26
+    thermal_target_gdd: 2100
+    thermal_target_range: [1700, 2700]
+    preferred_texture: [medium]
+    altitude_max_m: 4500
+  durum_wheat:
+    ecocrop_id: 10582
+    temperature_c: [6, 17, 25, 30]
+    ph: [5.5, 6, 7, 8.5]
+    cycle_days: [120, 180]
+    kc: [0.7, 1.15, 0.3]
+    root_depth_m: 1.0
+    depletion_fraction: 0.55
+    thermal_base_c: 0
+    thermal_upper_c: 26
+    thermal_target_gdd: 2100
+    thermal_target_range: [1700, 2500]
+    preferred_texture: [medium, heavy]
+  barley:
+    ecocrop_id: 1232
+    temperature_c: [2, 15, 20, 40]
+    ph: [6, 6.5, 7.5, 8]
+    cycle_days: [90, 240]
+    kc: [0.3, 1.15, 0.25]
+    root_depth_m: 1.0
+    depletion_fraction: 0.55
+    thermal_base_c: 0
+    thermal_upper_c: 26
+    thermal_target_gdd: 1700
+    thermal_target_range: [1400, 2100]
+    preferred_texture: [medium]
+    altitude_max_m: 4400
+  faba:
+    ecocrop_id: 2146
+    temperature_c: [5, 18, 28, 32]
+    ph: [4.5, 6, 7, 8.6]
+    # EcoCrop 100-150 days and FAO56 November dry-bean example 235 days.
+    # This union is an uncertainty envelope, not a Moroccan maturity guarantee.
+    cycle_days: [100, 235]
+    kc: [0.5, 1.15, 0.3]
+    root_depth_m: 0.6
+    depletion_fraction: 0.45
+    thermal_base_c: 0
+    thermal_upper_c: 30
+    thermal_target_gdd: 2100
+    thermal_target_range: [1700, 2600]
+    preferred_texture: [medium]
+    altitude_max_m: 2700
+  lentil:
+    ecocrop_id: 7209
+    temperature_c: [5, 15, 29, 32]
+    ph: [4.5, 5.5, 7.5, 8.2]
+    cycle_days: [70, 240]
+    kc: [0.4, 1.10, 0.3]
+    root_depth_m: 0.7
+    depletion_fraction: 0.50
+    thermal_base_c: 0
+    thermal_upper_c: 30
+    thermal_target_gdd: 1900
+    thermal_target_range: [1500, 2400]
+    preferred_texture: [medium, heavy]
+    altitude_max_m: 3800
+  chickpea:
+    ecocrop_id: 2479
+    temperature_c: [7, 15, 29, 35]
+    ph: [4.7, 6, 8.5, 9.5]
+    cycle_days: [90, 180]
+    kc: [0.4, 1.15, 0.35]
+    root_depth_m: 0.8
+    depletion_fraction: 0.50
+    thermal_base_c: 0
+    thermal_upper_c: 30
+    thermal_target_gdd: 2000
+    thermal_target_range: [1600, 2500]
+    preferred_texture: [medium, heavy]
+    altitude_max_m: 2300

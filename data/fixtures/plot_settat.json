@@ -1,0 +1,45 @@
+{
+  "name": "Synthetic settat demonstration plot",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -7.601,
+          33.0
+        ],
+        [
+          -7.6,
+          33.0
+        ],
+        [
+          -7.6,
+          33.001
+        ],
+        [
+          -7.601,
+          33.001
+        ],
+        [
+          -7.601,
+          33.0
+        ]
+      ]
+    ]
+  },
+  "constraints": {
+    "budget_mad": "1000000.00",
+    "production_system": "rainfed",
+    "irrigation_reliability": "unknown",
+    "machinery_access": "available",
+    "labor_person_days_available": "1000",
+    "labor_by_month": {},
+    "previous_crops": [],
+    "priorities": [],
+    "sale_price_mad_per_kg": {},
+    "yield_kg_per_ha": {},
+    "setup_cost_mad": "200.00",
+    "wage_mad_per_person_day": "100.00",
+    "payment_lag_days": 30
+  }
+}

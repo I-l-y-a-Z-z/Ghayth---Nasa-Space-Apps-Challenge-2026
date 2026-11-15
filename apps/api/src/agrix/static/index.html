@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#153f32">
+  <title>Ghayth — Farm planning studio</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+  <script src="/assets/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to planner</a>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Plot navigation">
+      <a class="brand" href="/" aria-label="Ghayth home"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M30 7C15 6 6 13 10 25c11 7 23-2 20-18Z"/><path d="M7 33 25 15"/></svg><span>Agri<span class="brand-x">X</span><small>FARM PLANNING STUDIO</small></span></a>
+      <div class="workspace-label"><span class="status-dot"></span> Morocco workspace <span class="mini-badge">DEMO</span></div>
+      <div class="sidebar-section-title">YOUR PLOTS <button id="refresh-workspace" class="icon-button" type="button" title="Refresh workspace" aria-label="Refresh workspace">↻</button></div>
+      <div id="plot-list" class="plot-list" aria-live="polite"><p class="muted sidebar-placeholder">Loading your workspace…</p></div>
+      <button id="new-plot-button" class="sidebar-new" type="button"><span aria-hidden="true">＋</span> Add a test plot</button>
+      <div class="sidebar-foot">
+        <div class="sidebar-note-icon" aria-hidden="true">↗</div>
+        <strong>A place to explore.</strong>
+        <p>Try different crops, budgets, and farm constraints before building the full farmer experience.</p>
+        <button id="seed-button" class="text-button" type="button">Load sample scenarios <span aria-hidden="true">→</span></button>
+        <a href="/docs" target="_blank" rel="noopener">Open API documentation ↗</a>
+      </div>
+    </aside>
+
+    <div class="main-shell">
+      <header class="topbar"><div class="breadcrumb">Workspace <span>/</span> <span id="breadcrumb-plot">Farm planner</span></div><div class="topbar-right"><span id="connection-status" class="connection"><span class="status-dot"></span> Connecting</span><span class="avatar" title="Demo workspace">AX</span></div></header>
+      <main id="main-content" tabindex="-1">
+        <div id="error-banner" class="message-banner error-banner" role="alert" hidden><span id="error-message"></span><button id="dismiss-error" class="icon-button" type="button" aria-label="Dismiss error">×</button></div>
+        <div id="toast" class="toast" role="status" hidden></div>
+        <div class="page-heading"><div><div class="eyebrow">MAKE ROOM FOR WHAT’S NEXT</div><h1>Your land. A clearer plan.</h1><p>Explore crop rotations, understand the work, and see what your budget can support.</p></div><span class="outline-pill"><span aria-hidden="true">◇</span> Testing workspace</span></div>
+        <nav class="view-tabs" aria-label="Workspace views"><button class="view-tab active" data-view="planner" type="button" aria-selected="true">Rotation planner</button><button class="view-tab" data-view="weather" type="button" aria-selected="false">NASA samples <span id="weather-count" class="tab-count">0</span></button><button class="view-tab" data-view="saved" type="button" aria-selected="false">Saved plans <span id="saved-count" class="tab-count">0</span></button></nav>
+
+        <section id="view-planner" class="view-panel">
+          <div id="empty-workspace" class="empty-state card" hidden><div class="empty-symbol">⌁</div><h2>A fresh field of possibilities</h2><p>Load the sample scenarios to explore a complete profile, a missing soil test, and tight cash or machinery constraints.</p><button id="empty-seed-button" class="button primary" type="button">Load sample scenarios</button></div>
+          <div id="planner-content" hidden>
+            <section class="plot-overview card" aria-labelledby="plot-title">
+              <div class="plot-illustration" aria-hidden="true"><svg viewBox="0 0 240 150"><defs><pattern id="field-lines" patternUnits="userSpaceOnUse" width="14" height="14" patternTransform="rotate(-28)"><path d="M0 0v14" stroke="#93ae7b" stroke-width="5"/></pattern></defs><path d="m23 70 80-46 109 35-66 73Z" fill="#e4e5b9"/><path d="m29 66 82-46 101 35-67 72Z" fill="url(#field-lines)"/><path d="m29 66 82-46 101 35-67 72Z" fill="none" stroke="#346247" stroke-width="2"/><path d="m111 20 2 61 32 46M29 66l84 15 99-26" stroke="#f6f4e4" stroke-width="4" fill="none"/><circle cx="111" cy="20" r="4" fill="#153f32"/><circle cx="29" cy="66" r="4" fill="#153f32"/><circle cx="145" cy="127" r="4" fill="#153f32"/><circle cx="212" cy="55" r="4" fill="#153f32"/></svg><span>Illustrative plot</span></div>
+              <div class="plot-information"><div class="eyebrow" id="plot-region">YOUR SELECTED PLOT</div><h2 id="plot-title">Select a plot</h2><p id="plot-description"></p><div class="plot-meta"><span><b id="plot-area">—</b> hectares</span><span id="plot-coordinates">—</span><span id="plot-revision">Revision 1</span></div></div>
+              <div class="overview-action"><span class="soft-badge">Demo planning inputs</span><button id="analyze-button" class="button secondary" type="button">Refresh profile <span aria-hidden="true">↻</span></button></div>
+            </section>
+
+            <section class="profile-section" aria-labelledby="profile-heading"><div class="section-heading"><div><h2 id="profile-heading">Get to know the ground</h2><p>Demonstration profile. Your imported NASA observations are in the separate samples tab.</p></div><span id="profile-status" class="soft-badge">Loading profile</span></div><div id="profile-grid" class="profile-grid"></div><div id="profile-gaps" class="inline-note" hidden></div></section>
+
+            <section class="planning-card card" aria-labelledby="planning-heading"><div class="section-heading"><div><div class="eyebrow">01 / SET THE CONDITIONS</div><h2 id="planning-heading">A plan that works for your farm</h2><p>Change an assumption, then compare again to see its effect.</p></div><span class="mini-label">EDITABLE DEMO ASSUMPTIONS</span></div>
+              <form id="planning-form"><div class="form-grid"><label>Planning start<input id="planning-start" type="date" value="2026-11-01" required></label><label>Planning horizon<select id="planning-horizon"><option value="365">1 year</option><option value="730" selected>2 years</option><option value="1095">3 years</option><option value="1825">5 years</option></select></label><label>Available budget <span class="input-unit">MAD</span><input id="budget-input" type="number" min="0" step="100" placeholder="Unknown"></label><label>Machinery access<select id="machinery-input"><option value="available">Available / contractor arranged</option><option value="unavailable">Unavailable</option><option value="unknown">Needs confirmation</option></select></label><label>Available farm labor <span class="input-unit">person-days</span><input id="labor-input" type="number" min="0" step="0.5" placeholder="Unknown"></label><label>Buyer payment delay <span class="input-unit">days</span><input id="payment-input" type="number" min="0" max="365" step="1" value="30" required></label></div>
+                <details class="advanced-options"><summary>Yield, price, and setup assumptions</summary><p class="muted">These are editable scenario inputs, not verified quotes or yield forecasts. Leave a crop value blank to retain its current assumption.</p><div id="crop-assumptions" class="assumption-grid"></div><div class="form-grid compact"><label>One-time setup <span class="input-unit">MAD</span><input id="setup-input" type="number" min="0" step="50"></label><label>Paid labor rate <span class="input-unit">MAD / day</span><input id="wage-input" type="number" min="0" step="10"></label></div></details>
+                <div class="form-actions"><span id="input-dirty-note" class="muted">Results use the assumptions shown above.</span><button id="suggest-button" class="button primary" type="submit">Compare rotations <span aria-hidden="true">→</span></button></div>
+              </form>
+            </section>
+
+            <section aria-labelledby="comparison-heading" class="comparison-section"><div class="section-heading"><div><div class="eyebrow">02 / EXPLORE YOUR OPTIONS</div><h2 id="comparison-heading">Find your next growing rhythm</h2></div><span class="muted">Same plot. Shared assumptions.</span></div><div id="candidate-grid" class="candidate-grid"><div class="empty-state card"><span class="empty-symbol">↔</span><h3>Your comparison starts here</h3><p>Choose your conditions above, then compare two demonstration crop rotations.</p></div></div></section>
+
+            <section class="custom-card card" aria-labelledby="custom-heading"><div class="section-heading"><div><h2 id="custom-heading">Have another sequence in mind?</h2><p>Build your own rotation and run it through the same checks.</p></div><button id="add-crop-button" class="button subtle" type="button">＋ Add season</button></div><div id="custom-sequence" class="custom-sequence"></div><div class="form-actions"><span class="muted">Dates are editable. The demo catalog uses November planting windows.</span><div class="button-group"><button id="save-draft-button" class="button secondary" type="button">Save draft</button><button id="evaluate-button" class="button primary" type="button">Evaluate sequence →</button></div></div></section>
+
+            <section id="evaluation-section" class="evaluation-section" hidden aria-labelledby="evaluation-heading"><div class="section-heading"><div><div class="eyebrow">03 / SEE THE WHOLE PICTURE</div><h2 id="evaluation-heading">Your rotation, in detail</h2><p id="evaluation-subtitle"></p></div><span id="evaluation-status" class="status-badge"></span></div><div id="evaluation-metrics" class="financial-grid"></div><div class="evaluation-columns"><section class="card cash-card"><div class="section-heading"><h3>Cash through the seasons</h3><span class="mini-label">CUMULATIVE MAD</span></div><div id="cash-chart"></div><p class="chart-caption">Sales arrive after the buyer’s payment delay. Setup is charged once.</p></section><section class="card reasons-card"><h3>What needs your attention</h3><div id="evaluation-reasons"></div></section></div>
+              <section class="card timeline-card"><div class="section-heading"><h3>From preparation to harvest</h3><span id="labor-summary" class="muted"></span></div><div class="table-scroll"><table><thead><tr><th>Date</th><th>Operation</th><th>Crop</th><th>Farm labor</th><th class="numeric">Cash cost</th></tr></thead><tbody id="timeline-body"></tbody></table></div></section>
+              <div class="save-bar card"><div><strong>Keep a plan to come back to.</strong><p>Save the displayed evaluation with its current assumptions.</p></div><div class="save-controls"><label class="sr-only" for="plan-name">Plan name</label><input id="plan-name" placeholder="Name this plan" maxlength="200"><button id="save-plan-button" class="button primary" type="button">Save plan</button></div></div>
+              <section class="card chat-card"><div class="section-heading"><div><h3>A little help understanding the numbers</h3><p>Try a read-only financial summary. Responses come from this evaluation.</p></div><label class="sr-only" for="chat-locale">Chat language</label><select id="chat-locale"><option value="ary">الدارجة</option><option value="fr">Français</option><option value="en" selected>English</option></select></div><form id="chat-form" class="chat-input-row"><label class="sr-only" for="chat-message">Your question</label><input id="chat-message" value="Explain this plan’s funding needs" required maxlength="4000"><button id="chat-button" class="button secondary" type="submit">Ask →</button></form><div id="chat-response" class="chat-response" role="status" hidden></div><span class="mini-label">DETERMINISTIC DEMO RESPONSE · DOES NOT CHANGE YOUR PLAN</span></section>
+              <details class="raw-details"><summary>Inspect evaluation and source evidence</summary><pre id="raw-evaluation"></pre></details>
+            </section>
+          </div>
+        </section>
+
+        <section id="view-weather" class="view-panel" hidden><div class="section-heading"><div><div class="eyebrow">IMPORTED OBSERVATIONS</div><h2>The weather behind the sample</h2><p>Your actual NASA downloads, kept separate from demonstration crop evaluations.</p></div><span class="outline-pill">October 2024</span></div><div class="weather-intro card"><span class="weather-intro-symbol" aria-hidden="true">☀</span><div><h3>A month of context, with its limits intact.</h3><p>POWER is a point extraction from regional model grids. IMERG Early and Late are satellite rainfall estimates averaged over the Settat sample box. They do not establish a whole-season forecast, field accuracy, or Final-run rainfall.</p></div></div><div id="weather-samples" class="weather-samples"></div></section>
+
+        <section id="view-saved" class="view-panel" hidden><div class="section-heading"><div><div class="eyebrow">YOUR SHORTLIST</div><h2>Good plans deserve a second look.</h2><p>Reopen the saved evaluation and its original assumptions, or continue an unfinished draft.</p></div></div><div id="saved-plans" class="saved-plans"></div></section>
+
+        <footer class="page-footer"><span><strong>Ghayth</strong> · Built for clearer farm decisions.</span><span>Demo crop rules & budgets · Imported NASA samples labeled separately</span></footer>
+      </main>
+    </div>
+  </div>
+
+  <dialog id="new-plot-dialog"><form id="new-plot-form"><div class="dialog-heading"><div><div class="eyebrow">A NEW START</div><h2>Add a test plot</h2></div><button id="close-new-plot" class="icon-button" type="button" aria-label="Close new plot form">×</button></div><p class="muted">Create an illustrative rectangular boundary around your chosen center. This is not a surveyed farm boundary.</p><label>Plot name<input id="new-plot-name" value="My test plot" required maxlength="200"></label><div class="form-grid compact"><label>Center latitude<input id="new-plot-lat" type="number" step="any" value="33.0" required></label><label>Center longitude<input id="new-plot-lon" type="number" step="any" value="-7.6" required></label><label>Target area <span class="input-unit">hectares</span><input id="new-plot-area" type="number" min="0.01" max="10000" step="0.01" value="5" required></label><label>Budget <span class="input-unit">MAD</span><input id="new-plot-budget" type="number" min="0" step="100" value="25000" required></label></div><p class="muted">The server calculates the actual geodesic area. Plots beyond the demo regions will show explicit coverage gaps.</p><button id="create-plot-button" class="button primary full-width" type="submit">Create test plot →</button></form></dialog>
+</body>
+</html>

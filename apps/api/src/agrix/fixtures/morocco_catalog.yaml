@@ -1,0 +1,522 @@
+version: morocco-primary-guides-v1
+fixture_version: morocco-primary-guides-v1
+synthetic: false
+crops:
+- id: wheat
+  label_key: crop.wheat
+  group: cereal
+  family: Poaceae
+  zone_ids: &id001
+  - settat
+  - saiss
+  - zaer
+  - abda
+  production_systems:
+  - rainfed
+  sowing_months:
+  - 11
+  - 12
+  sowing_windows:
+  - start_month: 11
+    start_day: 1
+    end_month: 12
+    end_day: 15
+  duration_days: 180
+  yield_kg_per_ha: 0
+  sale_price_mad_per_kg: 0
+  budget_yield_status: missing
+  operations:
+  - id: sowing
+    offset_days: 0
+    machinery_id: seed_drill
+    machinery_mode: rented
+    costs_known: false
+    quantities: []
+    source_ids:
+    - morocco-cereals-2017
+    - morocco-planning-assumptions-v1
+    labor_known: false
+  - id: weed_management
+    offset_days: 40
+    machinery_id: null
+    machinery_mode: none
+    costs_known: false
+    source_ids:
+    - morocco-cereals-2017
+    - morocco-planning-assumptions-v1
+    labor_known: false
+  - id: harvest
+    offset_days: 179
+    machinery_id: combine_harvester
+    machinery_mode: hired_with_operator
+    costs_known: false
+    source_ids:
+    - morocco-cereals-2017
+    - morocco-planning-assumptions-v1
+    labor_known: false
+  synthetic: false
+  references:
+  - &id002
+    id: morocco-cereals-2017
+    source_id: morocco-ministry-agriculture-cereal-reference
+    source_version: 2237-N891-16c; 2017-05-29
+    url: https://ardna.org/admincockpit/files/contenus_files/ticket_file641196ed6f8cc-N891-R%C3%A9f%C3%A9rentiel-c%C3%A9r%C3%A9ales-MEP-HB-29_05_2017-(final).pdf
+    origin: observed
+    topics:
+    - sowing
+    - predecessor
+    - management
+    quality_notes:
+    - Moroccan Ministry/NOVEC technical reference. Printed pages 23 (crop requirements
+      and barley cereal-predecessor exclusion), 39-41 (regional rotations), 43 (November
+      to mid-December cereal sowing).
+    - Regional rotation table applies to holdings below 5 ha; not generalized here
+      as a mandatory rotation.
+    - Soft wheat water requirement discussed in guide is not encoded as a rainfall-only
+      feasibility threshold.
+  - &id003
+    id: morocco-planning-assumptions-v1
+    source_id: agrix-explicit-planning-assumptions
+    source_version: '1.0'
+    origin: assumption
+    topics:
+    - duration
+    - management
+    - fallow
+    quality_notes:
+    - Nominal crop durations and operation dates are scheduling assumptions, not validated
+      cultivar phenology.
+    - Operation costs, yields, prices, labor quantities and local machinery access
+      are missing until farmer inputs/quotes are supplied.
+    - Zero catalog price/yield values are schema placeholders with budget_yield_status=missing;
+      never use as economic observations.
+    - Fallow is an explicit occupancy interval; no assumed disease, fertility or profit
+      effect.
+    uncertainty: Requires farmer/agronomist confirmation of cultivar, harvest date
+      and management; no calibrated yield response.
+  - &id004
+    id: morocco-pilot-region-lookup-v1
+    source_id: agrix-conservative-pilot-region-lookup
+    source_version: '1.0'
+    origin: assumption
+    topics:
+    - geography
+    quality_notes:
+    - Small approximate lookup extents within named Moroccan source regions; not official
+      administrative/agroecological boundaries.
+    - Whole-plot containment is required. Every matched extent remains partial, requiring
+      local region confirmation.
+    - 'Source regions: cereal reference printed page 43; legume guide printed page
+      8.'
+  geographic_coverage: &id005
+  - zone_id: settat
+    bounds:
+    - -7.68
+    - 32.9
+    - -7.5
+    - 33.12
+    production_systems:
+    - rainfed
+    source_ids:
+    - morocco-cereals-2017
+    - morocco-inra-legumes-2015
+    approximate: true
+    label: Settat pilot vicinity, Chaouia; approximate lookup extent
+  - zone_id: saiss
+    bounds:
+    - -5.75
+    - 33.8
+    - -5.35
+    - 34.1
+    production_systems:
+    - rainfed
+    source_ids:
+    - morocco-cereals-2017
+    - morocco-inra-legumes-2015
+    approximate: true
+    label: Meknes pilot vicinity, Saiss; approximate lookup extent
+  - zone_id: zaer
+    bounds:
+    - -6.78
+    - 33.48
+    - -6.4
+    - 33.72
+    production_systems:
+    - rainfed
+    source_ids:
+    - morocco-cereals-2017
+    - morocco-inra-legumes-2015
+    approximate: true
+    label: Zaer pilot vicinity; approximate lookup extent
+  - zone_id: abda
+    bounds:
+    - -8.92
+    - 32.12
+    - -8.52
+    - 32.42
+    production_systems:
+    - rainfed
+    source_ids:
+    - morocco-cereals-2017
+    - morocco-inra-legumes-2015
+    approximate: true
+    label: Abda pilot vicinity; approximate lookup extent
+- id: durum_wheat
+  label_key: crop.durum_wheat
+  group: cereal
+  family: Poaceae
+  zone_ids: *id001
+  production_systems:
+  - rainfed
+  sowing_months:
+  - 11
+  - 12
+  sowing_windows:
+  - start_month: 11
+    start_day: 1
+    end_month: 12
+    end_day: 15
+  duration_days: 180
+  yield_kg_per_ha: 0
+  sale_price_mad_per_kg: 0
+  budget_yield_status: missing
+  operations:
+  - id: sowing
+    offset_days: 0
+    machinery_id: seed_drill
+    machinery_mode: rented
+    costs_known: false
+    quantities: []
+    source_ids:
+    - morocco-cereals-2017
+    - morocco-planning-assumptions-v1
+    labor_known: false
+  - id: weed_management
+    offset_days: 40
+    machinery_id: null
+    machinery_mode: none
+    costs_known: false
+    source_ids:
+    - morocco-cereals-2017
+    - morocco-planning-assumptions-v1
+    labor_known: false
+  - id: harvest
+    offset_days: 179
+    machinery_id: combine_harvester
+    machinery_mode: hired_with_operator
+    costs_known: false
+    source_ids:
+    - morocco-cereals-2017
+    - morocco-planning-assumptions-v1
+    labor_known: false
+  synthetic: false
+  references:
+  - *id002
+  - *id003
+  - *id004
+  geographic_coverage: *id005
+- id: barley
+  label_key: crop.barley
+  group: cereal
+  family: Poaceae
+  zone_ids: *id001
+  production_systems:
+  - rainfed
+  sowing_months:
+  - 11
+  - 12
+  sowing_windows:
+  - start_month: 11
+    start_day: 1
+    end_month: 12
+    end_day: 15
+  duration_days: 160
+  yield_kg_per_ha: 0
+  sale_price_mad_per_kg: 0
+  budget_yield_status: missing
+  operations:
+  - id: sowing
+    offset_days: 0
+    machinery_id: seed_drill
+    machinery_mode: rented
+    costs_known: false
+    quantities: []
+    source_ids:
+    - morocco-cereals-2017
+    - morocco-planning-assumptions-v1
+    labor_known: false
+  - id: weed_management
+    offset_days: 40
+    machinery_id: null
+    machinery_mode: none
+    costs_known: false
+    source_ids:
+    - morocco-cereals-2017
+    - morocco-planning-assumptions-v1
+    labor_known: false
+  - id: harvest
+    offset_days: 159
+    machinery_id: combine_harvester
+    machinery_mode: hired_with_operator
+    costs_known: false
+    source_ids:
+    - morocco-cereals-2017
+    - morocco-planning-assumptions-v1
+    labor_known: false
+  synthetic: false
+  references:
+  - *id002
+  - *id003
+  - *id004
+  geographic_coverage: *id005
+  forbidden_predecessors:
+  - wheat
+  - durum_wheat
+  - barley
+- id: faba
+  label_key: crop.faba
+  group: legume
+  family: Fabaceae
+  zone_ids: *id001
+  production_systems:
+  - rainfed
+  sowing_months:
+  - 11
+  - 12
+  sowing_windows:
+  - start_month: 11
+    start_day: 1
+    end_month: 12
+    end_day: 31
+  duration_days: 180
+  yield_kg_per_ha: 0
+  sale_price_mad_per_kg: 0
+  budget_yield_status: missing
+  operations:
+  - id: sowing
+    offset_days: 0
+    machinery_id: seed_drill
+    machinery_mode: rented
+    costs_known: false
+    quantities:
+    - unit: kg/ha
+      qualifier: indicative; confirm seed size and germination
+      source_ids:
+      - morocco-inra-legumes-2015
+      label: seed
+      per_ha: '120'
+    source_ids:
+    - morocco-inra-legumes-2015
+    - morocco-planning-assumptions-v1
+    labor_known: false
+  - id: weed_management
+    offset_days: 40
+    machinery_id: null
+    machinery_mode: none
+    costs_known: false
+    source_ids:
+    - morocco-inra-legumes-2015
+    - morocco-planning-assumptions-v1
+    labor_known: false
+  - id: harvest
+    offset_days: 179
+    machinery_id: combine_harvester
+    machinery_mode: hired_with_operator
+    costs_known: false
+    source_ids:
+    - morocco-inra-legumes-2015
+    - morocco-planning-assumptions-v1
+    labor_known: false
+  synthetic: false
+  references:
+  - &id006
+    id: morocco-inra-legumes-2015
+    source_id: inra-morocco-practical-legume-guide
+    source_version: 2015; legal deposit 2015MO4520; ISBN 978-9954-36-822-0
+    url: https://www.agripedia.ma/sites/default/files/2019-03/Guide-pratique-pour-le-conseil-agricole-lentille-pois-chiche-f%C3%A8ve.pdf
+    origin: observed
+    topics:
+    - sowing
+    - soil
+    - management
+    quality_notes:
+    - INRA-authored guide, supported by KAFACI/ICARDA; full document hosted by Agripedia.
+    - 'Printed pages 8-9: winter chickpea regional sowing, soil and pH; page 11: winter
+      legume sowing and indicative seeding quantities.'
+    - Chickpea means winter-adapted cultivars. Spring chickpea calendar is separate
+      and not implemented.
+    - Seeding quantities are indicative; seed size, germination and soil conditions
+      must be confirmed.
+  - *id003
+  - *id004
+  geographic_coverage: *id005
+  ph_min: 6.5
+  ph_max: 8
+- id: lentil
+  label_key: crop.lentil
+  group: legume
+  family: Fabaceae
+  zone_ids: *id001
+  production_systems:
+  - rainfed
+  sowing_months:
+  - 11
+  - 12
+  sowing_windows:
+  - start_month: 11
+    start_day: 1
+    end_month: 12
+    end_day: 31
+  duration_days: 170
+  yield_kg_per_ha: 0
+  sale_price_mad_per_kg: 0
+  budget_yield_status: missing
+  operations:
+  - id: sowing
+    offset_days: 0
+    machinery_id: seed_drill
+    machinery_mode: rented
+    costs_known: false
+    quantities:
+    - unit: kg/ha
+      qualifier: indicative; confirm seed size and germination
+      source_ids:
+      - morocco-inra-legumes-2015
+      label: seed
+      per_ha: '50'
+    source_ids:
+    - morocco-inra-legumes-2015
+    - morocco-planning-assumptions-v1
+    labor_known: false
+  - id: weed_management
+    offset_days: 40
+    machinery_id: null
+    machinery_mode: none
+    costs_known: false
+    source_ids:
+    - morocco-inra-legumes-2015
+    - morocco-planning-assumptions-v1
+    labor_known: false
+  - id: harvest
+    offset_days: 169
+    machinery_id: combine_harvester
+    machinery_mode: hired_with_operator
+    costs_known: false
+    source_ids:
+    - morocco-inra-legumes-2015
+    - morocco-planning-assumptions-v1
+    labor_known: false
+  synthetic: false
+  references:
+  - *id006
+  - *id003
+  - *id004
+  geographic_coverage: *id005
+- id: chickpea
+  label_key: crop.chickpea
+  group: legume
+  family: Fabaceae
+  zone_ids: *id001
+  production_systems:
+  - rainfed
+  sowing_months:
+  - 11
+  - 12
+  - 1
+  sowing_windows:
+  - start_month: 11
+    start_day: 1
+    end_month: 12
+    end_day: 31
+    zone_ids:
+    - settat
+    - abda
+  - start_month: 12
+    start_day: 1
+    end_month: 1
+    end_day: 31
+    zone_ids:
+    - saiss
+    - zaer
+  duration_days: 180
+  yield_kg_per_ha: 0
+  sale_price_mad_per_kg: 0
+  budget_yield_status: missing
+  operations:
+  - id: sowing
+    offset_days: 0
+    machinery_id: seed_drill
+    machinery_mode: rented
+    costs_known: false
+    quantities:
+    - unit: kg/ha
+      qualifier: indicative; confirm seed size and germination
+      source_ids:
+      - morocco-inra-legumes-2015
+      label: seed
+      per_ha: '80'
+    source_ids:
+    - morocco-inra-legumes-2015
+    - morocco-planning-assumptions-v1
+    labor_known: false
+  - id: weed_management
+    offset_days: 40
+    machinery_id: null
+    machinery_mode: none
+    costs_known: false
+    source_ids:
+    - morocco-inra-legumes-2015
+    - morocco-planning-assumptions-v1
+    labor_known: false
+  - id: harvest
+    offset_days: 179
+    machinery_id: combine_harvester
+    machinery_mode: hired_with_operator
+    costs_known: false
+    source_ids:
+    - morocco-inra-legumes-2015
+    - morocco-planning-assumptions-v1
+    labor_known: false
+  synthetic: false
+  references:
+  - *id006
+  - *id003
+  - *id004
+  geographic_coverage: *id005
+  ph_min: 6
+  ph_max: 9
+- id: fallow
+  label_key: crop.fallow
+  group: fallow
+  family: null
+  zone_ids: *id001
+  production_systems:
+  - rainfed
+  - irrigated
+  - unknown
+  sowing_months:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  duration_days: 90
+  duration_min_days: 1
+  duration_max_days: 3650
+  yield_kg_per_ha: 0
+  sale_price_mad_per_kg: 0
+  budget_yield_status: missing
+  operations: []
+  fallow: true
+  synthetic: false
+  references:
+  - *id003
+  - *id004
+  geographic_coverage: *id005

@@ -1,0 +1,98 @@
+{
+  "period": [
+    "2021-01-01",
+    "2025-12-31"
+  ],
+  "sources_preserved": true,
+  "earthdata_authentication_verified": true,
+  "profiles": [
+    {
+      "location": "Settat",
+      "weather_days": 1826,
+      "root_zone_valid_days": 1825,
+      "layers": {
+        "rainfall": "available",
+        "temperature": "available",
+        "soil_properties": "available",
+        "soil_moisture": "partial",
+        "terrain": "available",
+        "vegetation": "partial"
+      },
+      "soil_ph": "7.6",
+      "terrain_slope_degrees": "2.65099235",
+      "water_availability": {
+        "source": "NASA precipitation and SMAP root-zone moisture",
+        "root_zone_days": 1825,
+        "rain_days": 1826,
+        "requested_days": 1826,
+        "irrigation_access": "unverified",
+        "note": "Modeled crop water is separate from verified irrigation delivery, well yield and legal allocation."
+      },
+      "sources": [
+        "HLS_v2",
+        "NASADEM_HGT",
+        "NASA_POWER_DAILY",
+        "NASA_POWER_SMAP_L4",
+        "SoilGrids"
+      ]
+    },
+    {
+      "location": "Meknes",
+      "weather_days": 1826,
+      "root_zone_valid_days": 1825,
+      "layers": {
+        "rainfall": "available",
+        "temperature": "available",
+        "soil_properties": "partial",
+        "soil_moisture": "partial",
+        "terrain": "available",
+        "vegetation": "missing"
+      },
+      "soil_ph": null,
+      "terrain_slope_degrees": "4.56544344",
+      "water_availability": {
+        "source": "NASA precipitation and SMAP root-zone moisture",
+        "root_zone_days": 1825,
+        "rain_days": 1826,
+        "requested_days": 1826,
+        "irrigation_access": "unverified",
+        "note": "Modeled crop water is separate from verified irrigation delivery, well yield and legal allocation."
+      },
+      "sources": [
+        "NASADEM_HGT",
+        "NASA_POWER_DAILY",
+        "NASA_POWER_SMAP_L4",
+        "SoilGrids"
+      ]
+    },
+    {
+      "location": "Agadir",
+      "weather_days": 1826,
+      "root_zone_valid_days": 1825,
+      "layers": {
+        "rainfall": "available",
+        "temperature": "available",
+        "soil_properties": "partial",
+        "soil_moisture": "partial",
+        "terrain": "available",
+        "vegetation": "missing"
+      },
+      "soil_ph": null,
+      "terrain_slope_degrees": "1.33192504",
+      "water_availability": {
+        "source": "NASA precipitation and SMAP root-zone moisture",
+        "root_zone_days": 1825,
+        "rain_days": 1826,
+        "requested_days": 1826,
+        "irrigation_access": "unverified",
+        "note": "Modeled crop water is separate from verified irrigation delivery, well yield and legal allocation."
+      },
+      "sources": [
+        "NASADEM_HGT",
+        "NASA_POWER_DAILY",
+        "NASA_POWER_SMAP_L4",
+        "SoilGrids"
+      ]
+    }
+  ]
+}

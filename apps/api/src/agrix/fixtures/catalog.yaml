@@ -1,0 +1,118 @@
+# Illustrative costs for testing; these are assumptions, not verified local quotes or agronomic rules.
+version: synthetic-catalog-1.1.0
+fixture_version: synthetic-1.0.0
+synthetic: true
+crops:
+  - id: wheat_demo
+    label_key: crop.wheat_demo
+    group: cereal
+    zone_ids: [settat_demo, meknes_demo]
+    production_systems: [rainfed]
+    sowing_months: [11]
+    duration_days: 180
+    forbidden_predecessors: [wheat_demo, barley_demo]
+    yield_kg_per_ha: '2000'
+    sale_price_mad_per_kg: '3.00'
+    operations:
+      - id: prepare
+        offset_days: 0
+        machinery_id: tractor_demo
+        machinery_mode: hired_with_operator
+        machinery_mad_per_ha: '750.00'
+        included_operator_person_days_per_ha: '0.5'
+        family_person_days_per_ha: '0.25'
+      - id: sow
+        offset_days: 1
+        inputs_mad_per_ha: '900.00'
+        machinery_id: seed_drill_demo
+        machinery_mode: hired_with_operator
+        machinery_mad_per_ha: '350.00'
+        included_operator_person_days_per_ha: '0.25'
+        paid_person_days_per_ha: '1'
+        family_person_days_per_ha: '0.5'
+      - id: field_care
+        offset_days: 45
+        inputs_mad_per_ha: '2400.00'
+        paid_person_days_per_ha: '1'
+        family_person_days_per_ha: '0.5'
+      - id: harvest
+        offset_days: 179
+        machinery_id: combine_demo
+        machinery_mode: hired_with_operator
+        machinery_mad_per_ha: '900.00'
+        included_operator_person_days_per_ha: '0.5'
+        family_person_days_per_ha: '0.25'
+  - id: faba_demo
+    label_key: crop.faba_demo
+    group: legume
+    zone_ids: [settat_demo, meknes_demo]
+    production_systems: [rainfed]
+    sowing_months: [11]
+    duration_days: 160
+    forbidden_predecessors: [faba_demo]
+    yield_kg_per_ha: '1200'
+    sale_price_mad_per_kg: '5.00'
+    operations:
+      - id: prepare
+        offset_days: 0
+        machinery_id: tractor_demo
+        machinery_mode: hired_with_operator
+        machinery_mad_per_ha: '650.00'
+        included_operator_person_days_per_ha: '0.5'
+      - id: sow
+        offset_days: 1
+        inputs_mad_per_ha: '1200.00'
+        machinery_id: seed_drill_demo
+        machinery_mode: hired_with_operator
+        machinery_mad_per_ha: '300.00'
+        included_operator_person_days_per_ha: '0.25'
+        paid_person_days_per_ha: '1'
+        family_person_days_per_ha: '1'
+      - id: field_care
+        offset_days: 40
+        inputs_mad_per_ha: '1000.00'
+        paid_person_days_per_ha: '1'
+      - id: harvest
+        offset_days: 159
+        machinery_id: tractor_demo
+        machinery_mode: hired_with_operator
+        machinery_mad_per_ha: '700.00'
+        included_operator_person_days_per_ha: '0.5'
+        family_person_days_per_ha: '1'
+  - id: barley_demo
+    label_key: crop.barley_demo
+    group: cereal
+    zone_ids: [settat_demo, meknes_demo]
+    production_systems: [rainfed]
+    sowing_months: [11]
+    duration_days: 150
+    forbidden_predecessors: [wheat_demo, barley_demo]
+    yield_kg_per_ha: '1800'
+    sale_price_mad_per_kg: '2.50'
+    operations:
+      - id: prepare
+        offset_days: 0
+        machinery_id: tractor_demo
+        machinery_mode: hired_with_operator
+        machinery_mad_per_ha: '650.00'
+        included_operator_person_days_per_ha: '0.5'
+      - id: sow
+        offset_days: 1
+        inputs_mad_per_ha: '650.00'
+        machinery_id: seed_drill_demo
+        machinery_mode: hired_with_operator
+        machinery_mad_per_ha: '300.00'
+        included_operator_person_days_per_ha: '0.25'
+        paid_person_days_per_ha: '1'
+        family_person_days_per_ha: '0.5'
+      - id: field_care
+        offset_days: 40
+        inputs_mad_per_ha: '1600.00'
+        paid_person_days_per_ha: '0.5'
+      - id: harvest
+        offset_days: 149
+        machinery_id: combine_demo
+        machinery_mode: hired_with_operator
+        machinery_mad_per_ha: '800.00'
+        included_operator_person_days_per_ha: '0.5'
+        family_person_days_per_ha: '0.5'

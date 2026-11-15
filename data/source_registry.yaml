@@ -1,0 +1,861 @@
+registry_version: 1.1.0
+reviewed_on: '2026-11-15'
+purpose: Source inventory and qualified live implementation status; Part 1 fixture
+  isolation preserved
+use_in_part1_runtime: false
+selection_values:
+- primary
+- fallback
+- optional
+- rejected
+- unresolved
+verification_note: 'Selection is independent of verification: a chosen source may
+  still have untested pilot pixels or missing records. Documentation review is not
+  field validation.'
+sources:
+- id: nasa_imerg_final
+  name: GPM IMERG Final daily
+  inputs:
+  - historical_daily_rainfall
+  selection: primary
+  verification_status: documentation_reviewed_sample_pending
+  source_url: https://doi.org/10.5067/GPM/IMERGDF/DAY/07
+  version: GPM_3IMERGDF collection 07; retain actual V07B processing label separately
+  geographic_coverage: Near-global; Morocco within documented footprint; individual
+    plot/day validity untested
+  temporal_coverage: Directory describes January 1998 onward, approximately 3.5 months
+    behind acquisition; exact daily holdings to query
+  spatial_resolution: 0.1 degree latitude/longitude, approximately 10 km
+  temporal_resolution: daily UTC
+  variables:
+  - precipitation
+  - precipitation_cnt
+  - randomError
+  units:
+    precipitation: mm/day
+    precipitation_cnt: count
+    randomError: mm/day
+  access: Earthdata HTTPS; Harmony/HOSS spatial and variable subsets; Giovanni area-averaged
+    samples
+  authentication: Free Earthdata Login for protected data
+  usage_conditions: NASA data citation; preserve collection and subset lineage
+  quality_filters:
+  - Retain fill values and valid retrieval counts; zero rain is valid
+  - Flag incomplete days; read units and scale attributes before conversion
+  engine_use: Historical planting-window rain totals, documented rain-onset definitions
+    and dry-spell exposure; not a weather forecast
+  unresolved:
+  - No Final-run scientific file supplied
+  - Need native pixels, retrieval counts, multi-year coverage and independent local
+    comparison
+  documentation_urls:
+  - https://gpm.nasa.gov/data/directory
+  - https://doi.org/10.5067/GPM/IMERGDF/DAY/07
+  - https://github.com/nasa/gesdisc-tutorials/blob/main/user-guidance/GES_DISC_Migration_to_Earthdata_Website_and_Earthdata_Cloud.md
+- id: nasa_imerg_late
+  name: GPM IMERG Late daily
+  inputs:
+  - recent_daily_rainfall
+  selection: fallback
+  verification_status: local_sample_structure_checked
+  source_url: https://doi.org/10.5067/GPM/IMERGDL/DAY/07
+  version: GPM_3IMERGDL collection 07
+  geographic_coverage: Near-global; supplied area average requested [-7.7,32.9,-7.5,33.1]
+  temporal_coverage: Supplied October 2024; wider archive requires query; near-real-time
+    nominal latency approximately 12–14 hours
+  spatial_resolution: 0.1 degree native grid; local CSV averages the pilot box
+  temporal_resolution: daily UTC
+  variables:
+  - precipitation
+  units:
+    precipitation: mm/day in provider product; CSV header omits explicit unit
+  access: Earthdata/Harmony or Giovanni; local CSV inspected
+  authentication: Earthdata Login for protected access
+  usage_conditions: NASA data citation; identify Late run explicitly
+  quality_filters:
+  - 31 contiguous sample dates and no declared fill values checked
+  - CSV lacks native retrieval counts; confirm exported units via lineage
+  engine_use: Optional recent rainfall context, kept separate from Final historical
+    comparisons
+  unresolved:
+  - Need native quality fields and unit lineage
+  - Never relabel supplied Late values as Final
+  documentation_urls:
+  - https://gpm.nasa.gov/data/directory
+  - https://giovanni.gsfc.nasa.gov/giovanni/doc/UsersManualworkingdocument.docx.html
+- id: nasa_imerg_early
+  name: GPM IMERG Early daily
+  inputs:
+  - rapid_rainfall_context
+  selection: optional
+  verification_status: local_sample_structure_checked
+  source_url: https://doi.org/10.5067/GPM/IMERGDE/DAY/07
+  version: GPM_3IMERGDE collection 07
+  geographic_coverage: Near-global; supplied pilot area average only
+  temporal_coverage: Supplied October 2024; nominal near-real-time latency approximately
+    4 hours
+  spatial_resolution: 0.1 degree native grid; local CSV is area-averaged
+  temporal_resolution: daily UTC
+  variables:
+  - precipitation
+  units:
+    precipitation: mm/day in provider product; CSV header omits explicit unit
+  access: Earthdata/Harmony or Giovanni; local CSV inspected
+  authentication: Earthdata Login for protected access
+  usage_conditions: NASA data citation; identify Early run explicitly
+  quality_filters:
+  - 31 contiguous sample dates and no declared fill values checked
+  - Native pixel quality and explicit units absent in exported CSV
+  engine_use: Access demonstration and run comparison only; not the selected historical
+    baseline
+  unresolved:
+  - No Final run equivalence established
+  - No need to integrate Early alongside Late in Part 1
+  documentation_urls:
+  - https://gpm.nasa.gov/data/directory
+- id: nasa_power_weather
+  name: NASA POWER Daily meteorology and radiation
+  inputs:
+  - temperature
+  - humidity
+  - wind
+  - solar_radiation
+  selection: primary
+  verification_status: local_sample_structure_checked
+  source_url: https://power.larc.nasa.gov/docs/services/api/temporal/daily/
+  version: POWER API v2.10.3 in supplied file; MERRA2, SYN1DEG and POWER source labels
+  geographic_coverage: Global source grids; local point longitude -7.6 latitude 33.0
+    checked
+  temporal_coverage: Meteorology from 1981; local sample 2024-10-01 to 2024-10-31;
+    variable coverage differs
+  spatial_resolution: Meteorology 0.5 degree latitude by 0.625 degree longitude; radiation
+    native source grid differs
+  temporal_resolution: daily; use explicit UTC for comparisons
+  variables:
+  - T2M
+  - T2M_MIN
+  - T2M_MAX
+  - RH2M
+  - WS2M
+  - ALLSKY_SFC_SW_DWN
+  units:
+    temperature: degC
+    RH2M: percent
+    WS2M: m/s
+    ALLSKY_SFC_SW_DWN: MJ/m2/day in supplied AG response
+  access: Public POWER Daily point API; cache by source cell and period
+  authentication: No Earthdata Login or NASA API key required for public endpoint
+  usage_conditions: Observe POWER service limits and attribution; avoid repeated requests
+    for the same source cell
+  quality_filters:
+  - Honor header fill_value -999 and time_standard
+  - All seven supplied parameters have 31 dates, no nulls or fill values
+  - Keep near-real-time continuation provenance distinct from reanalysis
+  engine_use: Historical heat/cold exposure and covariates; water-use modeling only
+    after separately justified parameters
+  unresolved:
+  - One month does not establish a climatic baseline or field accuracy
+  - Need multiyear series and geographically distinct samples
+  documentation_urls:
+  - https://power.larc.nasa.gov/docs/services/api/temporal/daily/
+  - https://power.larc.nasa.gov/docs/methodology/data/sources_meteorology/
+- id: nasa_power_rainfall
+  name: POWER corrected reanalysis precipitation
+  inputs:
+  - daily_rainfall_cross_check
+  selection: fallback
+  verification_status: local_sample_structure_checked
+  source_url: https://power.larc.nasa.gov/docs/methodology/data/sources_meteorology/
+  version: PRECTOTCORR through POWER API v2.10.3 in supplied response
+  geographic_coverage: Global coarse source grid; Settat point inspected
+  temporal_coverage: Local October 2024; other periods require query
+  spatial_resolution: Approximately 0.5 by 0.625 degree meteorological source grid
+  temporal_resolution: daily UTC in sample
+  variables:
+  - PRECTOTCORR
+  units:
+    PRECTOTCORR: mm/day
+  access: Public POWER point API
+  authentication: None for public API
+  usage_conditions: POWER attribution and service limits
+  quality_filters:
+  - Retain missing values separately from zero
+  - Do not confuse PRECTOTCORR with newly documented IMERG_PRECTOT
+  engine_use: Fallback or comparison rainfall with explicit source change, not an
+    independent rain gauge
+  unresolved:
+  - No local gauge validation
+  - Any Final/Late IMERG parameters exposed through POWER need separate lineage/version
+    verification
+  documentation_urls:
+  - https://power.larc.nasa.gov/docs/methodology/data/sources_meteorology/
+- id: nasa_smap_l4
+  name: SMAP L4 surface and root-zone soil moisture
+  inputs:
+  - regional_soil_moisture
+  selection: primary
+  verification_status: documentation_reviewed_sample_pending
+  source_url: https://nsidc.org/data/spl4smgp/versions/8
+  version: SPL4SMGP version 8 (008); DOI 10.5067/T5RUATAQREF8
+  geographic_coverage: Global EASE-Grid 2.0 land footprint approximately 85N–85S;
+    local valid cells untested
+  temporal_coverage: 2015-03-31 onward
+  spatial_resolution: 9 km; native EPSG:6933
+  temporal_resolution: 3-hourly
+  variables:
+  - Geophysical_Data/sm_surface
+  - Geophysical_Data/sm_rootzone
+  units:
+    sm_surface: m3/m3, vertical average 0–5 cm
+    sm_rootzone: m3/m3, vertical average 0–100 cm
+  access: Earthdata Search and Harmony spatial/variable subsets; HDF5 or supported
+    transformed output
+  authentication: Free Earthdata Login
+  usage_conditions: NSIDC citation required; describe subset and acquisition date
+  quality_filters:
+  - Retain missing/land masks and file quality metadata
+  - Review product notices; 2026-05-14 through 2026-07-28 geolocation reprocessing
+    notice present at review
+  engine_use: Regional modeled moisture context; never represent as measured farm
+    moisture
+  unresolved:
+  - No local sample or validation
+  - Capture assimilation/model provenance; do not infer irrigation reliability
+  documentation_urls:
+  - https://nsidc.org/data/spl4smgp/versions/8
+  - https://nsidc.org/sites/default/files/documents/user-guide/multi_spl4smau-v008-userguide.pdf
+  - https://nsidc.org/sites/default/files/documents/technical-reference/smap_l4_sm_psd_v17_for_l4sm_version_8.pdf
+- id: isric_soilgrids
+  name: ISRIC SoilGrids predictions
+  inputs:
+  - gridded_soil_properties
+  selection: primary
+  verification_status: documentation_reviewed_sample_pending
+  source_url: https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs.html
+  version: SoilGrids 2.0; pin exact downloaded release and tile identifiers
+  geographic_coverage: Global modeled soils; local mask/gaps possible
+  temporal_coverage: Static modeled release, not a current soil test
+  spatial_resolution: 250 m
+  temporal_resolution: static
+  variables:
+  - sand
+  - silt
+  - clay
+  - phh2o
+  - soc
+  - bdod
+  - depth_interval
+  - mean
+  - Q0.05
+  - Q0.95
+  units:
+    texture: g/kg stored; divide by 10 for percent
+    phh2o: pH times 10 stored; divide by 10
+    soc: dg/kg stored; divide by 10 for g/kg
+    bdod: cg/cm3 stored; divide by 100 for kg/dm3
+    depths: 0–5,5–15,15–30,30–60,60–100,100–200 cm
+  access: Prefer WCS spatial subsets or self-contained tiled GeoTIFF exports; REST
+    beta documented as paused
+  authentication: Public documented services
+  usage_conditions: CC BY 4.0
+  quality_filters:
+  - Preserve depths, prediction quantiles, nodata and original scaling
+  - Do not treat a remote-referencing VRT alone as an offline dataset
+  engine_use: Texture/pH constraints with uncertainty; field measurements override
+    only the properties and depths measured
+  unresolved:
+  - Need pilot subsets and scale conversion verification
+  - No field-level certainty or measured salinity/nutrient sufficiency inferred
+  documentation_urls:
+  - https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs_01.html
+  - https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs_02.html
+- id: field_soil_tests
+  name: Farmer-supplied soil laboratory records
+  inputs:
+  - measured_plot_soil
+  selection: primary
+  verification_status: records_pending
+  source_url: null
+  version: 'Per report: laboratory, method, sampling date and report revision'
+  geographic_coverage: Only the sampled plot/depth supported by sampling design
+  temporal_coverage: Sampling date per report; freshness assessed per property
+  spatial_resolution: Actual sampling footprint
+  temporal_resolution: irregular
+  variables:
+  - measured_property
+  - sample_depth
+  - laboratory_method
+  - sampling_date
+  units:
+    properties: retain report units; convert once to documented canonical units
+  access: Farmer-provided document or structured entry; not yet supplied
+  authentication: Project access only
+  usage_conditions: Farmer permission and report reuse conditions; no blanket public
+    redistribution
+  quality_filters:
+  - Check method, depth, location, units and report identity
+  - Do not overwrite unrelated modeled properties
+  engine_use: Override corresponding gridded property with measured evidence
+  unresolved:
+  - No report supplied
+  - Need laboratory method and representative sampling footprint
+  documentation_urls: []
+- id: nasa_srtm
+  name: NASA SRTM elevation
+  inputs:
+  - terrain_slope
+  selection: optional
+  verification_status: documentation_reviewed_sample_pending
+  source_url: https://doi.org/10.5067/MEaSUREs/SRTM/SRTMGL1.003
+  version: SRTMGL1 collection 003
+  geographic_coverage: Approximately 60N–56S; Morocco within footprint
+  temporal_coverage: February 2000 acquisition; static terrain
+  spatial_resolution: 1 arc second, approximately 30 m
+  temporal_resolution: static
+  variables:
+  - elevation
+  units:
+    elevation: m
+    derived_slope: degrees or percent, explicitly declared
+  access: Earthdata/LP DAAC tiles; retain surrounding pixels for slope
+  authentication: Free Earthdata Login for protected NASA delivery
+  usage_conditions: NASA/LP DAAC attribution; retain datum metadata
+  quality_filters:
+  - Check voids, water and fill values; slope calculation in an appropriate metric
+    CRS
+  engine_use: Optional terrain constraint and slope context, not a current field survey
+  unresolved:
+  - Need valid pilot tile and vertical datum check
+  - No direct runoff/erosion prediction without an additional model
+  documentation_urls:
+  - https://www.usgs.gov/centers/eros/science/usgs-eros-archive-digital-elevation-shuttle-radar-topography-mission-srtm-1
+  - https://search.earthdata.nasa.gov/search?q=SRTMGL1
+- id: nasa_hls
+  name: Harmonized Landsat Sentinel-2 surface reflectance
+  inputs:
+  - vegetation_history
+  selection: optional
+  verification_status: documentation_reviewed_sample_pending
+  source_url: https://hls.gsfc.nasa.gov/data-products/
+  version: HLSL30 and HLSS30 v2.0; retain granule and processing identifiers
+  geographic_coverage: Global land tiling; plot-size and valid-pixel limits apply
+  temporal_coverage: L30 from 2013; S30 from 2015; actual clear acquisitions vary
+  spatial_resolution: 30 m
+  temporal_resolution: acquisition-based; daily collection does not guarantee clear
+    daily observations
+  variables:
+  - L30 B04/B05
+  - S30 B04/B8A
+  - Fmask
+  units:
+    reflectance: unitless after documented scale conversion
+    NDVI: unitless
+  access: Earthdata COG assets; subset required bands and retain quality assets
+  authentication: Free Earthdata Login
+  usage_conditions: NASA HLS attribution and granule citations
+  quality_filters:
+  - Mask cloud, shadow, snow/ice, fill and unsuitable aerosol conditions using product
+    guide
+  - Check valid pixel fraction over plot, not only scene cloud percentage
+  engine_use: Vegetation seasonality or bare-period summaries; not ground-truth crop
+    identity
+  unresolved:
+  - No usable scenes checked
+  - Need define metric and minimum plot/pixel support before integration
+  documentation_urls:
+  - https://hls.gsfc.nasa.gov/data-products/
+  - https://hls.gsfc.nasa.gov/algorithms/
+  - https://hls.gsfc.nasa.gov/data-access-and-tools/
+- id: era5
+  name: Copernicus ERA5 single levels
+  inputs:
+  - weather_cross_check
+  selection: fallback
+  verification_status: documentation_reviewed_sample_pending
+  source_url: https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels?tab=overview
+  version: ERA5; pin CDS request, dataset revision and retrieval date
+  geographic_coverage: Global reanalysis
+  temporal_coverage: 1940 onward
+  spatial_resolution: 0.25 degree regular grid delivery; native model scale differs
+  temporal_resolution: hourly
+  variables:
+  - 2m_temperature
+  - total_precipitation
+  - 2m_dewpoint_temperature
+  units:
+    temperature: K to degC by subtracting 273.15
+    total_precipitation: m water equivalent to mm by multiplying by 1000
+  access: CDS download/API; aggregate with documented UTC and accumulation conventions
+  authentication: CDS account, credential and dataset terms acceptance where required
+  usage_conditions: Copernicus attribution and dataset license terms
+  quality_filters:
+  - Check provisional/final status and accumulation semantics
+  - Do not assume independence from all other modeled products
+  engine_use: Weather sensitivity checks or explicit fallback, not an unlabelled merged
+    series
+  unresolved:
+  - No data downloaded
+  - Need station comparison where available and correct accumulation processing
+  documentation_urls:
+  - https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels?tab=overview
+  - https://climate.copernicus.eu/climate-reanalysis
+- id: morocco_dgm
+  name: Moroccan Direction Générale de la Météorologie station records
+  inputs:
+  - station_validation
+  selection: unresolved
+  verification_status: provider_identified_access_unverified
+  source_url: https://www.marocmeteo.ma/fr
+  version: null
+  geographic_coverage: Stations in Morocco; eligible nearby station inventory not
+    acquired
+  temporal_coverage: Station-specific periods unresolved
+  spatial_resolution: Point station observations with representativeness limits
+  temporal_resolution: Station-specific
+  variables:
+  - daily_rainfall
+  - daily_temperature
+  - station_location
+  - quality_flags
+  units:
+    rainfall: verify original units; canonical mm/day
+    temperature: verify original units; canonical degC
+  access: Request documented historical station series and reuse terms from provider
+  authentication: Access and fees/agreements not established
+  usage_conditions: Do not assume public bulk-download or redistribution rights
+  quality_filters:
+  - Need station metadata, relocation history, quality flags and completeness
+  engine_use: Independent local cross-check when a suitable series is accessible
+  unresolved:
+  - Obtain station inventory, sample, license and applicable period
+  documentation_urls:
+  - https://www.marocmeteo.ma/fr
+- id: morocco_cereal_reference
+  name: Moroccan cereals technical and economic reference, adviser edition
+  inputs:
+  - cereal_calendars
+  - cereal_rotation_rules
+  - cereal_operations
+  selection: primary
+  verification_status: publication_sections_reviewed_qualified_rules_encoded
+  source_url: https://ardna.org/admincockpit/files/contenus_files/ticket_file641196ed6f8cc-N891-R%C3%A9f%C3%A9rentiel-c%C3%A9r%C3%A9ales-MEP-HB-29_05_2017-%28final%29.pdf
+  version: NOVEC Phase 3 cereals adviser reference; filename edition 2017-05-29
+  geographic_coverage: Region-specific Moroccan tables, including Chaouia-Ouardigha/Settat;
+    not automatic nationwide rules
+  temporal_coverage: Publication-era guidance; costs are historical, not current quotes
+  spatial_resolution: Agricultural region and homogeneous zone
+  temporal_resolution: Crop-season rules
+  variables:
+  - crop_group
+  - zone
+  - predecessor
+  - sowing_window
+  - operations
+  units:
+    dates: calendar windows per documented region
+    yield: retain source units; distinguish observed and attainable
+    cost: historical MAD where explicitly documented
+  access: Public PDF; sections 5.3.1–5.3.4 reviewed for structure and regional applicability
+  authentication: Public document access
+  usage_conditions: Public reading does not establish a blanket republication license;
+    cite page and edition
+  quality_filters:
+  - Trace original references and geographic/farm-size qualifiers
+  - Review with Moroccan agronomist before operational rules
+  engine_use: Source-qualified cereal calendars and barley predecessor check in approximate
+    supported pilot regions; local maturity/operation timing remain assumptions.
+  unresolved:
+  - Local agronomist review and current cultivar advice remain pending
+  - No calibrated maturity/yield or current operation costs/labor demands extracted
+  - Regional small-farm rotation tables are not national hard rules; approximate geographic
+    lookup requires confirmation
+  documentation_urls:
+  - https://ardna.org/admincockpit/files/contenus_files/ticket_file641196ed6f8cc-N891-R%C3%A9f%C3%A9rentiel-c%C3%A9r%C3%A9ales-MEP-HB-29_05_2017-%28final%29.pdf
+  initial_inventory_verification_status: publication_sections_reviewed_rules_not_encoded
+  full_text_url: https://ardna.org/admincockpit/files/contenus_files/ticket_file641196ed6f8cc-N891-R%C3%A9f%C3%A9rentiel-c%C3%A9r%C3%A9ales-MEP-HB-29_05_2017-%28final%29.pdf
+  implementation_status: qualified_calendar_and_barley_predecessor_rules_encoded
+  implemented_evidence_id: morocco-cereals-2017
+  reviewed_sections:
+  - 'Printed p.23: cereal requirements and barley cereal-predecessor exclusion'
+  - 'Printed pp.39-41: regional rotations, farm size below 5 ha qualification retained'
+  - 'Printed p.43: broad early-November to mid-December cereal sowing guidance'
+- id: inra_legume_guide
+  name: 'INRA Guide pratique pour le conseil agricole: Lentille, pois chiche et Fève'
+  inputs:
+  - legume_calendars
+  - legume_operations
+  selection: primary
+  verification_status: full_text_sections_reviewed_qualified_rules_encoded
+  source_url: https://www.inra.org.ma/fr/content/guide-pratique-pour-le-conseil-agricole-lentille-pois-chiche-et-feve
+  version: INRA Rabat 2015; legal deposit 2015MO4520; ISBN 978-9954-36-822-0
+  geographic_coverage: Moroccan winter-legume guidance; winter chickpea calendar distinguishes
+    Chaouia/Abda from Saiss/Zaer. Implementation limited to approximate pilot lookup
+    regions with explicit confirmation.
+  temporal_coverage: 2015 guidance
+  spatial_resolution: Crop/production-system specific after extraction
+  temporal_resolution: seasonal
+  variables:
+  - crop
+  - variety
+  - planting
+  - operations
+  units:
+    units: retain source units and document conversions during extraction
+  access: INRA-authored full guide reviewed through Agripedia public PDF mirror; initial
+    INRA publication-page failure remains recorded by original inventory status.
+  authentication: Public full-text PDF; no credentials required
+  usage_conditions: Cite INRA edition and pages; confirm reuse conditions
+  quality_filters:
+  - Metadata review is not validation of agronomic thresholds
+  - Do not infer all-Morocco applicability from national publication title
+  engine_use: Qualified winter faba/lentil/chickpea calendars, faba/chickpea pH ranges
+    and indicative seed quantities; no spring-chickpea or calibrated yield model.
+  unresolved:
+  - Local agronomist review and cultivar-specific maturity remain pending
+  - Seed size and germination need local confirmation; operation demand, quotes and
+    yields remain unknown
+  - Do not generalize the regional winter chickpea calendar to spring cultivars or
+    all Moroccan plots
+  documentation_urls:
+  - https://www.inra.org.ma/fr/content/guide-pratique-pour-le-conseil-agricole-lentille-pois-chiche-et-feve
+  - https://www.inra.org.ma/sites/default/files/publications/ouvrages/leguminkafacifr15.pdf
+  - https://www.agripedia.ma/sites/default/files/2019-03/Guide-pratique-pour-le-conseil-agricole-lentille-pois-chiche-f%C3%A8ve.pdf
+  initial_inventory_verification_status: bibliographic_metadata_reviewed_full_text_pending
+  full_text_url: https://www.agripedia.ma/sites/default/files/2019-03/Guide-pratique-pour-le-conseil-agricole-lentille-pois-chiche-f%C3%A8ve.pdf
+  implementation_status: qualified_winter_legume_calendars_ph_and_indicative_seed_quantities_encoded
+  implemented_evidence_id: morocco-inra-legumes-2015
+  reviewed_sections:
+  - 'Printed p.8: winter chickpea regional planting and soil/pH guidance'
+  - 'Printed p.9: faba soil/pH guidance and qualitative legume/cereal rotation'
+  - 'Printed p.11: winter legume planting and indicative seed quantities'
+- id: icarda_merchouch_trial
+  name: Devkota Wasti et al., conservation agriculture in Morocco
+  inputs:
+  - observed_trial_yields
+  - rotation_evidence
+  selection: optional
+  verification_status: repository_metadata_and_abstract_reviewed
+  source_url: https://repo.mel.cgiar.org/items/d39c860b-921d-46d0-ac6b-6d1ca4e7f91d/full
+  version: Agricultural Systems 201 (2022), 103470; DOI 10.1016/j.agsy.2022.103470
+  geographic_coverage: Merchouch, Morocco; clay soil; rainfed Mediterranean environment
+  temporal_coverage: Field experimentation 2015–2019; separately identified long-term
+    simulations
+  spatial_resolution: Research plots; not transferable to arbitrary farms
+  temporal_resolution: Five experimental seasons
+  variables:
+  - wheat
+  - barley
+  - lentil
+  - chickpea
+  - tillage_system
+  - experimental_yield
+  - simulated_yield
+  units:
+    yield: retain study table units then convert to kg/ha
+    profitability: historical study assumptions, not current quotes
+  access: ICARDA/CGIAR repository metadata and open-access article
+  authentication: Public repository
+  usage_conditions: Repository lists CC BY 4.0
+  quality_filters:
+  - Separate field observations from calibrated DSSAT simulations
+  - Preserve site, soil, treatment, varieties and experiment years
+  engine_use: Prior evidence for matched rainfed cereal/legume systems, not generic
+    farm-yield prediction
+  unresolved:
+  - Need full tables/raw data and transferability review
+  - No study yield or cost numbers encoded in fixtures
+  documentation_urls:
+  - https://repo.mel.cgiar.org/items/d39c860b-921d-46d0-ac6b-6d1ca4e7f91d/full
+- id: fao_gaez
+  name: FAO/IIASA Global Agro-Ecological Zoning
+  inputs:
+  - broad_crop_suitability
+  selection: optional
+  verification_status: documentation_reviewed_sample_pending
+  source_url: https://www.fao.org/gaez/en
+  version: GAEZ v5 (2025); pin exact output layer/scenario
+  geographic_coverage: Global modeled agroecological assessments
+  temporal_coverage: 2020 baseline; climate reference periods 1981–2000 and 2001–2020;
+    scenario-specific futures
+  spatial_resolution: 30 arc seconds, approximately 1 km for key outputs; verify chosen
+    layer
+  temporal_resolution: climate periods and scenario layers
+  variables:
+  - crop_suitability
+  - attainable_yield
+  - water_regime
+  - input_level
+  - climate_scenario
+  units:
+    suitability: layer-specific index/class
+    attainable_yield: verify layer units; not observed yield
+  access: FAO GAEZ v5 geospatial portal
+  authentication: Open-access portal; exact download workflow untested
+  usage_conditions: Check chosen layer terms and cite version/scenario
+  quality_filters:
+  - Preserve rainfed/irrigated regime, management level and climate period
+  engine_use: Broad contextual suitability only; never override applicable local rules
+    or plot tests
+  unresolved:
+  - No Morocco layer sampled
+  - Attainable model output cannot substitute for observed yields or budgeting assumptions
+  documentation_urls:
+  - https://www.fao.org/gaez/en
+- id: faostat_producer_prices
+  name: FAOSTAT agricultural producer prices
+  inputs:
+  - national_historical_producer_prices
+  selection: fallback
+  verification_status: metadata_reviewed_morocco_crop_rows_pending
+  source_url: https://data.fao.org/catalog/dataset/47c17894-8ca1-4bd0-ba4d-6078e919e9b1
+  version: PP domain; metadata revision 2025-12-04, pin downloaded release
+  geographic_coverage: National reporting countries; Morocco crop/year coverage must
+    be queried
+  temporal_coverage: Catalog advertises 1991–2025; individual country/item periods
+    differ
+  spatial_resolution: National
+  temporal_resolution: annual/monthly where reported
+  variables:
+  - area
+  - item
+  - element
+  - year
+  - value
+  - unit
+  - flag
+  units:
+    producer_price: LCU/tonne, SLC/tonne or USD/tonne; choose documented element
+    canonical_local_price: MAD/kg only after verifying Moroccan LCU and dividing per-tonne
+      values by 1000
+  access: FAOSTAT PP export or documented bulk release
+  authentication: Public access
+  usage_conditions: FAO metadata specifies CC BY 4.0
+  quality_filters:
+  - Retain country/item codes, data flags and currency element
+  - No filling missing crop-years from unrelated commodities
+  engine_use: National historical price context; no claim of current Settat buyer
+    or wholesale price
+  unresolved:
+  - Need Morocco rows for wheat, barley and any pilot legumes actually reported
+  - No crop-specific coverage or national-to-local adjustment verified
+  documentation_urls:
+  - https://data.fao.org/catalog/dataset/47c17894-8ca1-4bd0-ba4d-6078e919e9b1
+  - https://www.fao.org/faostat/en/#data/PP
+- id: morocco_asaar
+  name: Moroccan Ministry of Agriculture ASAAR market information
+  inputs:
+  - local_market_history
+  selection: unresolved
+  verification_status: official_reference_identified_access_unverified
+  source_url: https://asaar.agriculture.gov.ma/
+  version: null
+  geographic_coverage: Documented Moroccan market monitoring; exact market/item availability
+    pending
+  temporal_coverage: Series history unresolved
+  spatial_resolution: Market/stage-specific
+  temporal_resolution: Reporting frequency unresolved
+  variables:
+  - commodity
+  - market
+  - market_stage
+  - date
+  - price_range
+  - unit
+  units:
+    prices: verify bulletin units, grade and market stage before MAD/kg conversion
+  access: ASAAR portal referenced by official agricultural investment guide; export
+    access not demonstrated
+  authentication: Unknown; verify legitimate access and export terms
+  usage_conditions: No redistribution/license assumption
+  quality_filters:
+  - Keep wholesale, retail and producer observations separate
+  - A price index is not an absolute crop sale price
+  engine_use: Candidate market-specific history; does not set future sales assumptions
+    automatically
+  unresolved:
+  - Obtain official export, documented crop list, dates, market codes and terms
+  - Cereal/legume coverage not established
+  documentation_urls:
+  - https://ada.dardev.ma/sites/default/files/data/builder/Guide%20de%20l%27Investisseur_R.pdf
+  - https://asaar.agriculture.gov.ma/
+- id: farmer_records
+  name: Farmer plot records and constraints
+  inputs:
+  - plot_constraints
+  - previous_crops
+  - irrigation_reliability
+  selection: primary
+  verification_status: records_pending
+  source_url: null
+  version: Per record/version; save with plot revision
+  geographic_coverage: Only the farmer plot and time period described
+  temporal_coverage: Farmer-declared current state and dated history
+  spatial_resolution: Plot
+  temporal_resolution: irregular
+  variables:
+  - previous_crops
+  - irrigation_access
+  - irrigation_reliability
+  - labor_capacity
+  - machinery_access
+  - budget
+  units:
+    budget: MAD
+    labor: person-days per stated period
+    water: stated source/availability; quantities with declared units
+  access: Structured farmer input or verified farm records
+  authentication: Project-scoped access
+  usage_conditions: Farmer permission; precise boundaries and records private by default
+  quality_filters:
+  - Allow unknown answers; preserve who supplied the record and when
+  - Past crop identity cannot be derived from NDVI alone
+  engine_use: Actual history and capacity constraints, explicitly distinct from modeled
+    environmental context
+  unresolved:
+  - No actual farmer records supplied
+  - Irrigation infrastructure listing does not establish available water or legal
+    allocation
+  documentation_urls: []
+- id: local_quotes
+  name: Buyer, cooperative, contractor and supplier quotes
+  inputs:
+  - sale_price
+  - input_costs
+  - wages
+  - machinery_costs
+  - supplier_records
+  selection: unresolved
+  verification_status: records_pending
+  source_url: null
+  version: Quote/provider revision and verification date
+  geographic_coverage: Named locality and service delivery area
+  temporal_coverage: Issue/expiry date and applicable season
+  spatial_resolution: Farm, market or service area
+  temporal_resolution: irregular
+  variables:
+  - item_or_service
+  - unit
+  - price
+  - payment_lag
+  - operator_included
+  - provider
+  - availability
+  units:
+    price: MAD per explicitly stated quantity or service
+    labor: MAD/person-day and person-days
+    sale_quantity: kg marketable product
+  access: Direct dated quote or permissioned local directory record
+  authentication: Agreed access to supplied records
+  usage_conditions: Obtain consent for private contacts; public listing terms and
+    reuse unverified
+  quality_filters:
+  - Separate equipment rental from service with operator
+  - Record VAT/transport/grade/payment terms when relevant
+  - Listing is not confirmation of stock, booking or sale agreement
+  engine_use: Real budget inputs and service options only after verification
+  unresolved:
+  - No valid local quotes supplied
+  - Need sale-price/yield ranges, current service/wage/input costs and payment timing
+  documentation_urls: []
+local_samples:
+- path: data/raw/imerg/g4.areaAvgTimeSeries.GPM_3IMERGDE_07_precipitation.20241001-20241031.7W_32N_7W_33N.csv
+  sha256: 2da30214134b36ce586dd90a7f10af82f322feae4f2689445a444244be728fae
+  use_in_part1_runtime: false
+  source_id: nasa_imerg_early
+  verification: CSV parsed; 31 dates, no declared fill; area-average; explicit units
+    and native quality counts absent
+- path: data/raw/imerg/g4.areaAvgTimeSeries.GPM_3IMERGDL_07_precipitation.20241001-20241031.7W_32N_7W_33N.csv
+  sha256: 3bebe3a678862377ef65a97a1a488c70f8b1561d50deb5dbec697a465b984b0e
+  use_in_part1_runtime: false
+  source_id: nasa_imerg_late
+  verification: CSV parsed; 31 dates, no declared fill; area-average; explicit units
+    and native quality counts absent
+- path: data/raw/nasa_power/POWER_Point_Daily_20241001_20241031_033d00N_007d60W_UTC.json
+  sha256: f7c0b82edc471d136a9d8b8af96db2eecf34dafa3e5153ac680aa7f2521d733b
+  use_in_part1_runtime: false
+  source_id: nasa_power_weather
+  verification: JSON parsed; seven parameters, 31 dates, no declared fill values;
+    UTC; units present
+us_resource_mapping:
+- resource: SSURGO / STATSGO2 / Web Soil Survey
+  selection: rejected
+  reason: U.S. soil survey products do not establish Moroccan field properties
+  replacement_source_ids:
+  - isric_soilgrids
+  - field_soil_tests
+- resource: PRISM
+  selection: rejected
+  reason: U.S. climate analysis is not Moroccan climate evidence
+  replacement_source_ids:
+  - nasa_imerg_final
+  - nasa_power_weather
+  - era5
+  - morocco_dgm
+- resource: USDA Cropland Data Layer / CropScape
+  selection: rejected
+  reason: U.S. crop labels are not Moroccan crop-history ground truth
+  replacement_source_ids:
+  - farmer_records
+  - nasa_hls
+- resource: NAIP
+  selection: rejected
+  reason: U.S. aerial imagery does not cover Moroccan plots; no equivalent free parcel-resolution
+    provider selected
+  replacement_source_ids:
+  - nasa_hls
+  gap: Licensed basemap or imagery provider still needed for map workflow; HLS is
+    not a parcel-resolution equivalent
+- resource: USGS NWIS / U.S. water records
+  selection: rejected
+  reason: U.S. stream/groundwater records do not establish Moroccan irrigation supply
+  replacement_source_ids:
+  - farmer_records
+  gap: Applicable Moroccan basin, allocation and well records remain unresolved
+- resource: USDA AMS Market News / NASS QuickStats
+  selection: rejected
+  reason: U.S. prices, yields and production statistics are not Moroccan evidence
+  replacement_source_ids:
+  - faostat_producer_prices
+  - morocco_asaar
+  - local_quotes
+  - icarda_merchouch_trial
+- resource: NLDAS
+  selection: rejected
+  reason: North American land assimilation product; SMAP selected for Moroccan regional
+    moisture
+  replacement_source_ids:
+  - nasa_smap_l4
+  gap: GLDAS is global but no separate integration is justified for Part 1
+- resource: CoCoRaHS / NLCD / LANDFIRE
+  selection: rejected
+  reason: Challenge-described North American/U.S. observations and land-cover products
+    do not establish Moroccan plot evidence
+  replacement_source_ids:
+  - morocco_dgm
+  - farmer_records
+  - nasa_hls
+- resource: OpenET as described in challenge
+  selection: unresolved
+  reason: Do not assume Moroccan coverage from the challenge western-U.S. product
+    description
+  replacement_source_ids: []
+  gap: Define an ET use first; verify applicable global/Moroccan product and validation
+- resource: USDA Ag Data Commons
+  selection: optional
+  reason: Repository may host geographically relevant research; accept only individually
+    reviewed Moroccan records
+  replacement_source_ids:
+  - icarda_merchouch_trial
+live_implementation_status:
+  catalog_version: morocco-primary-guides-v1
+  status: qualified_primary_source_rules_encoded
+  implementation_paths:
+  - src/agrix/fixtures/morocco_catalog.yaml
+  - src/agrix/agronomy/
+  scope: Seven crop/fallow templates and evidence-qualified calendar, barley predecessor
+    and legume pH checks; historical weather diagnostics without calibrated yield
+    response.
+  qualification: Approximate pilot-region lookup remains partial. Source publication
+    review and software tests are not field or agronomist validation. Scientific maturity,
+    labor demand, costs, prices and yield forecasts remain unverified.
+  part1_inventory_preserved: true

@@ -1,0 +1,33 @@
+{
+  "recognition_load": "passed",
+  "recognition_http": {
+    "status": 200,
+    "seconds": 42.17,
+    "response": {
+      "text": "أن عندنا"
+    },
+    "sample_source": "atlasia/MoulSot-Full public test clip @lballonbdarija_53_150"
+  },
+  "synthesis_inference": {
+    "model": "KandirResearch/DarijaTTS-v0.1-500M",
+    "bytes": 109412,
+    "duration_seconds": 1.24,
+    "sample_rate": 44100,
+    "cold_setup_and_generation_seconds": 169.29
+  },
+  "native_listener_evaluation": "pending",
+  "agricultural_accuracy": "not measured by this integration smoke test",
+  "synthesis_http": {
+    "http_status": 200,
+    "seconds": 15.24,
+    "bytes": 97652,
+    "content_type": "audio/wav"
+  },
+  "browser_microphone": {
+    "capture": "passed",
+    "review_before_send": "passed",
+    "typed_correction_send": "passed",
+    "page_errors": [],
+    "input": "public upstream clip through Chrome fake audio device"
+  }
+}

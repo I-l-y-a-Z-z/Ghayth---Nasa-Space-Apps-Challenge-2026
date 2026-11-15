@@ -1,0 +1,40 @@
+Title:,"Time Series, Area-Averaged of Daily mean precipitation rate (combined microwave-IR) estimate - Late Run (daily)"
+User Start Date:,2024-10-01T00:00:00Z
+User End Date:,2024-10-31T23:59:59Z
+User Bounding Box:,"-7.7,32.9,-7.5,33.1"
+Data Bounding Box:,"-7.65,32.95,-7.55,33.05"
+URL to Reproduce Results:,"https://giovanni.gsfc.nasa.gov/giovanni/#service=ArAvTs&starttime=2024-10-01T00:00:00Z&endtime=2024-10-31T23:59:59Z&bbox=-7.7,32.9,-7.5,33.1&data=GPM_3IMERGDE_07_precipitation%2CGPM_3IMERGDL_07_precipitation&portal=GIOVANNI&format=json"
+Fill Value (GPM_3IMERGDL_07_precipitation):, -9999.9
+
+time, GPM_3IMERGDL_07_precipitation
+2024-10-01,0
+2024-10-02,0
+2024-10-03,0
+2024-10-04,0
+2024-10-05,0.430192679
+2024-10-06,0
+2024-10-07,1.3985877
+2024-10-08,0
+2024-10-09,0
+2024-10-10,0
+2024-10-11,0
+2024-10-12,13.4573641
+2024-10-13,3.00155807
+2024-10-14,0.176253542
+2024-10-15,4.39764929
+2024-10-16,0
+2024-10-17,0
+2024-10-18,0
+2024-10-19,0
+2024-10-20,0
+2024-10-21,0
+2024-10-22,0
+2024-10-23,0.118753538
+2024-10-24,0.0550212525
+2024-10-25,0.485008478
+2024-10-26,0
+2024-10-27,0
+2024-10-28,2.5093317
+2024-10-29,2.12610316
+2024-10-30,0.0975155756
+2024-10-31,0
