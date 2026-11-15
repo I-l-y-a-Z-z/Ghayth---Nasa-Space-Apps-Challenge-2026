@@ -32,6 +32,8 @@ PostgreSQL/PostGIS is the deployment database, with Alembic migrations in `apps/
 
 ## Boundaries
 
+The [Cloudflare deployment](cloudflare.md) runs the same application in one Linux container. Hosted PostgreSQL/PostGIS persists farm records; R2 stores checksum-verified scientific checkpoints. Cache restoration precedes job resumption, and terminal analyses wait for a successful checkpoint. Durable alarms keep background work active after a browser closes. The container may sleep when idle and restart on demand.
+
 Missing measurements remain unknown. Evidence records carry source identity, dates, units, resolution and limitations. Coarse grids remain regional context. Evaluations freeze the plot revision, profile, catalog and assumptions; new downloads do not rewrite saved plans.
 
 The engine runs without an LLM. Optional intent parsing cannot supply independent financial facts. Speech models provide recognition and synthesis; they do not decide crops or change plans. Standalone speech development tools are separate from mounted product routes.

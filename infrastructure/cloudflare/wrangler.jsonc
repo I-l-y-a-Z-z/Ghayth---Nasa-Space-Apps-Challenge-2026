@@ -1,0 +1,40 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "ghayth",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-11-15",
+  "workers_dev": true,
+  "observability": {"enabled": true},
+  "r2_buckets": [{"binding": "CACHE_BUCKET", "bucket_name": "ghayth-scientific"}],
+  "containers": [
+    {
+      "class_name": "Ghayth",
+      "scheduling_policy": "durable_object",
+      "images": {
+        "base": {
+          "dockerfile": "../../Dockerfile",
+          "build_context": "../..",
+          "build_vars": {"INSTALL_SPEECH": "1"}
+        }
+      }
+    }
+  ],
+  "durable_objects": {
+    "bindings": [{"name": "GHAYTH", "class_name": "Ghayth"}]
+  },
+  "exports": {"Ghayth": {"type": "durable-object", "storage": "sqlite"}},
+  "vars": {
+    "AGRIX_R2_BUCKET": "ghayth-scientific",
+    "AGRIX_R2_PREFIX": "ghayth/production/scientific",
+    "AGRIX_ALLOWED_PROJECTS": "demo",
+    "AGRIX_HLS_MAX_SCENES": "10",
+    "AGRIX_ASR_MODEL": "atlasia/moulsot.v0.3",
+    "AGRIX_ASR_BACKEND": "qwen",
+    "AGRIX_ASR_DTYPE": "bfloat16",
+    "AGRIX_TTS_MODEL": "KandirResearch/DarijaTTS-v0.1-500M",
+    "AGRIX_TTS_BACKEND": "kandir",
+    "AGRIX_INFERENCE_TIMEOUT": "170",
+    "GHAYTH_INSTANCE_TYPE": "standard-3",
+    "GHAYTH_KEEP_WARM": "false"
+  }
+}

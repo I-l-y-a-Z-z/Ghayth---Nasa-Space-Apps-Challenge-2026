@@ -40,11 +40,16 @@ def request_key(plot: Plot, start: date, end: date, settings: Settings) -> str:
 
 
 class AnalysisRunner:
-    def __init__(self, engine, settings: Settings, pipeline_factory=None):
+    def __init__(self, engine, settings: Settings, pipeline_factory=None, cache_store=None):
         self.engine = engine
         self.settings = settings
         self.pipeline_factory = pipeline_factory
-        self.executor = ThreadPoolExecutor(max_workers=2, thread_name_prefix="agrix-analysis")
+        self.cache_store = cache_store
+        if cache_store is not None and settings.analysis_workers != 1:
+            raise ValueError("Durable scientific cache requires one analysis worker")
+        self.executor = ThreadPoolExecutor(
+            max_workers=settings.analysis_workers, thread_name_prefix="agrix-analysis"
+        )
         self._running = set()
         self._lock = Lock()
 
@@ -138,6 +143,10 @@ class AnalysisRunner:
             zone, coverage = resolve_rule_coverage(analysis.plot_snapshot, load_agronomic_catalog())
             profile.zone_id, profile.rule_coverage = zone, coverage
             self.apply_soil_tests(profile, analysis.plot_snapshot)
+            # Commit scientific bytes before publishing a terminal DB snapshot.
+            # A failed upload leaves the job retryable, never falsely durable.
+            if self.cache_store is not None:
+                self.cache_store.checkpoint()
             states = {layer.availability for layer in profile.layers}
             status = (
                 "complete"
@@ -245,6 +254,10 @@ class AnalysisRunner:
 
     def close(self):
         self.executor.shutdown(wait=False, cancel_futures=True)
+
+    def has_work(self):
+        with self._lock:
+            return bool(self._running)
 
 
 def pending_profile(plot, version):

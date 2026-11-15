@@ -1,0 +1,8 @@
+# Copy to .dev.vars for local Wrangler tests. Never commit the populated file.
+# Store production values with `wrangler secret put NAME`.
+DATABASE_URL=postgresql://OWNER:PASSWORD@YOUR_NEON_HOST/ghayth?sslmode=require
+AGRIX_ACCESS_PASSWORD=replace-with-a-workspace-password
+AGRIX_SESSION_SECRET=replace-with-a-random-secret-at-least-32-characters
+AGRIX_INTERNAL_TOKEN=replace-with-another-random-secret-at-least-32-characters
+AGRIX_R2_BUCKET=ghayth-scientific
+AGRIX_R2_PREFIX=ghayth/production/scientific

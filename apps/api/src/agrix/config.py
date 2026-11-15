@@ -25,8 +25,11 @@ class Settings:
     llm_api_url: str | None = None
     llm_api_key: str | None = None
     llm_model: str | None = None
+    analysis_workers: int = 2
 
     def __post_init__(self):
+        if not 1 <= self.analysis_workers <= 4:
+            raise ValueError("AGRIX_ANALYSIS_WORKERS must be between 1 and 4")
         if self.default_analysis_mode not in {"live", "demo"}:
             raise ValueError("AGRIX_DEFAULT_ANALYSIS_MODE must be live or demo")
         if self.analysis_end < self.analysis_start:
@@ -68,6 +71,7 @@ class Settings:
             llm_api_url=os.environ.get("AGRIX_LLM_API_URL") or None,
             llm_api_key=os.environ.get("AGRIX_LLM_API_KEY") or None,
             llm_model=os.environ.get("AGRIX_LLM_MODEL") or None,
+            analysis_workers=int(os.environ.get("AGRIX_ANALYSIS_WORKERS", "2")),
         )
         if settings.default_analysis_mode not in {"live", "demo"}:
             raise ValueError("AGRIX_DEFAULT_ANALYSIS_MODE must be live or demo")

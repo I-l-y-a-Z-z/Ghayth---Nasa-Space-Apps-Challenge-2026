@@ -18,7 +18,43 @@ class SpeechRequest(BaseModel):
     text: str = Field(min_length=1, max_length=800)
 
 
+def speech_enabled():
+    return os.getenv("AGRIX_SPEECH_ENABLED", "true").lower() not in {
+        "false",
+        "0",
+        "no",
+        "off",
+    }
+
+
 def install_speech(app, *, recognizer=None, synthesizer=None):
+    app.state.speech_tasks = set()
+    if not speech_enabled():
+
+        @app.get("/speech/status", tags=["speech"])
+        def disabled_status():
+            unavailable = {
+                "available": False,
+                "loaded": False,
+                "model": None,
+                "backend": None,
+            }
+            return {
+                "enabled": False,
+                "recognition": unavailable,
+                "synthesis": unavailable,
+                "max_seconds": 0,
+                "lazy_loading": False,
+                "audio_retained": False,
+            }
+
+        @app.post("/speech/transcribe", tags=["speech"])
+        @app.post("/speech/synthesize", tags=["speech"])
+        def disabled_inference():
+            raise HTTPException(503, "This deployment provides typed chat.")
+
+        return
+
     from agrix_voice.audio import InvalidAudio, read_recording
     from agrix_voice.models import Recognizer, Synthesizer
 
@@ -26,6 +62,7 @@ def install_speech(app, *, recognizer=None, synthesizer=None):
     synthesizer = synthesizer or Synthesizer()
     semaphore = asyncio.Semaphore(1)
     pending = set()
+    app.state.speech_tasks = pending
     timeout = float(os.getenv("AGRIX_INFERENCE_TIMEOUT", "170"))
 
     def installed(*modules):
@@ -77,6 +114,7 @@ def install_speech(app, *, recognizer=None, synthesizer=None):
     @app.get("/speech/status", tags=["speech"])
     def status():
         return {
+            "enabled": True,
             "recognition": {
                 "available": asr_available(),
                 "model": recognizer.model_id,
@@ -128,5 +166,7 @@ def install_speech(app, *, recognizer=None, synthesizer=None):
             return synthesizer.speak(body.text)
 
         return Response(
-            await run(speak), media_type="audio/wav", headers={"Cache-Control": "no-store"}
+            await run(speak),
+            media_type="audio/wav",
+            headers={"Cache-Control": "no-store"},
         )

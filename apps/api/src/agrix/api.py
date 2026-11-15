@@ -1,9 +1,12 @@
 """Farm-planning API with live Earth profiles and explicitly labeled demo data."""
 
+import asyncio
+import os
 from collections.abc import Iterator
 from contextlib import asynccontextmanager
 from dataclasses import replace
 from importlib.resources import files
+from secrets import compare_digest
 from typing import Annotated
 
 from fastapi import Depends, FastAPI, Header, Request
@@ -71,6 +74,7 @@ def create_app(
     default_analysis_mode: str | None = None,
     settings: Settings | None = None,
     pipeline_factory=None,
+    cache_store=None,
 ) -> FastAPI:
     settings = settings or Settings.from_env()
     settings = replace(
@@ -81,10 +85,14 @@ def create_app(
 
     @asynccontextmanager
     async def lifespan(app):
-        app.state.runner.resume_pending()
-        yield
-        app.state.runner.close()
-        app.state.engine.dispose()
+        try:
+            if app.state.cache_store is not None:
+                await asyncio.to_thread(app.state.cache_store.restore)
+            app.state.runner.resume_pending()
+            yield
+        finally:
+            app.state.runner.close()
+            app.state.engine.dispose()
 
     app = FastAPI(
         title="AgriX — Morocco farm planning",
@@ -99,7 +107,14 @@ def create_app(
     )
     app.state.settings = settings
     app.state.engine = make_engine(settings.database_url)
-    app.state.runner = AnalysisRunner(app.state.engine, settings, pipeline_factory=pipeline_factory)
+    if cache_store is None:
+        from agrix.earth.object_store import cache_store_from_env
+
+        cache_store = cache_store_from_env(settings.cache_directory)
+    app.state.cache_store = cache_store
+    app.state.runner = AnalysisRunner(
+        app.state.engine, settings, pipeline_factory=pipeline_factory, cache_store=cache_store
+    )
     app.state.catalog = load_catalog()
     if initialize:
         create_schema(app.state.engine)
@@ -193,6 +208,16 @@ def create_app(
             "status": "ready",
             "database": app.state.engine.dialect.name,
             "default_analysis_mode": settings.default_analysis_mode,
+        }
+
+    @app.get("/_internal/runtime", include_in_schema=False)
+    def runtime(request: Request):
+        token = os.getenv("AGRIX_INTERNAL_TOKEN", "")
+        supplied = request.headers.get("X-Agrix-Internal-Token", "")
+        if not token or not compare_digest(token.encode(), supplied.encode()):
+            return JSONResponse({"detail": "Not found"}, status_code=404)
+        return {
+            "busy": app.state.runner.has_work() or bool(getattr(app.state, "speech_tasks", set()))
         }
 
     @app.get("/client-config", tags=["system"])

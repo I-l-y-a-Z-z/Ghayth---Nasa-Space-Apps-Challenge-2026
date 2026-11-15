@@ -20,6 +20,7 @@ dependencies = [
 dev = ["pytest>=8.3,<10", "httpx>=0.28,<1", "ruff>=0.9,<1"]
 browser = ["playwright>=1.50,<2"]
 earthdata = ["earthaccess>=0.14,<1"]
+cloudflare = ["botocore>=1.36,<2"]
 
 [project.scripts]
 agrix = "agrix.cli:main"

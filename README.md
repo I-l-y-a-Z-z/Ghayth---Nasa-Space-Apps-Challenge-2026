@@ -53,6 +53,8 @@ This checks TypeScript, browser security policies, the production build, backend
 - [Model sources](docs/model-data-sources.md), [NASA setup](docs/data-setup.md), [Earth integration](docs/earth-integration.md) and [agronomic rules](docs/agronomy.md)
 - [Automatic economics](docs/economics.md) and [local records/access](docs/local-records.md)
 - [Optional speech setup](services/speech/README.md) and [source provenance](docs/provenance.md)
+- [Free Render demo](docs/render.md): typed chat and planning with Neon/PostGIS, free instance limits and deployment
+- [Cloudflare deployment](docs/cloudflare.md): optional Workers Paid container hosting with durable R2 scientific files
 
 Docker/PostGIS configuration is in `compose.yaml`: `docker compose up --build`. The base image provides typed chat and planning; voice requires optional dependencies. Container execution has not been verified in this workspace.
 

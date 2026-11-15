@@ -1,0 +1,46 @@
+# Free typed-chat demo: one web service, existing Neon database, no paid resources.
+services:
+  - type: web
+    name: ghayth-demo
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health/ready
+    autoDeployTrigger: 'off'
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: AGRIX_ACCESS_PASSWORD
+        sync: false
+      - key: AGRIX_SESSION_SECRET
+        generateValue: true
+      - key: AGRIX_ENV
+        value: production
+      - key: AGRIX_DEPLOYMENT
+        value: render
+      - key: AGRIX_SPEECH_ENABLED
+        value: 'false'
+      - key: INSTALL_SPEECH
+        value: '0'
+      - key: AGRIX_ANALYSIS_WORKERS
+        value: '1'
+      - key: AGRIX_DEFAULT_ANALYSIS_MODE
+        value: live
+      - key: AGRIX_PROVIDER_NETWORK
+        value: 'true'
+      - key: AGRIX_REMOTE_ASSETS
+        value: '1'
+      - key: AGRIX_HLS_MAX_SCENES
+        value: '3'
+      - key: AGRIX_CACHE_DIRECTORY
+        value: /tmp/ghayth-cache
+      - key: OMP_NUM_THREADS
+        value: '1'
+      - key: OPENBLAS_NUM_THREADS
+        value: '1'
+      - key: GDAL_CACHEMAX
+        value: '32'
+      - key: MALLOC_ARENA_MAX
+        value: '2'

@@ -1,0 +1,57 @@
+name: Cloudflare build and optional deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: Publish to the configured Cloudflare account after validation
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cloudflare-production
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            infrastructure/cloudflare/package-lock.json
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - run: npm ci
+      - run: npm run cloudflare:install
+      - run: npm run cloudflare:check
+      - run: npm run check
+      - run: python -m pip install -e './apps/api[dev,earthdata,cloudflare]' -r services/speech/requirements.txt
+      - name: Backend and speech regression tests
+        env:
+          AGRIX_PROVIDER_NETWORK: 'false'
+          AGRIX_REMOTE_ASSETS: '0'
+        run: python -m pytest -q
+      - name: Build the full CPU-voice container image
+        run: docker build --build-arg INSTALL_SPEECH=1 --tag ghayth-cloudflare-validation .
+      - name: Validate Worker and container packaging
+        env:
+          WRANGLER_SEND_METRICS: 'false'
+        run: npm run cloudflare:dry-run
+      - name: Publish only when explicitly selected
+        if: ${{ inputs.deploy }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npm run cloudflare:deploy
